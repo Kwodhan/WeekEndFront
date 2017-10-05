@@ -8,12 +8,26 @@
  * Controller of the weekEndProjectApp
  */
 angular.module('weekEndProjectApp')
-  .controller('MainCtrl', ['$scope','Person',function ($scope, Person) {
-    $scope.go = function() {
-        var promise = Person.getPerson(1);
-        promise.then(function(data) {
-          console.log(data);
-          $scope.person = data;
-        });
-        };
+  .controller('MainCtrl', ['$scope','AuthService','Person','Location',function ($scope, AuthService,Person,Location) {
+
+
+        $scope.get = function() {
+            var promise = Person.getPerson(1);
+            promise.then(function(data) {
+              console.log(data);
+
+            });
+            };
+
+
+
+          $scope.location = function() {
+              var promise = Location.getLocation(1);
+              promise.then(function(data) {
+                console.log(data);
+
+              });
+              };
+
+
 }]);

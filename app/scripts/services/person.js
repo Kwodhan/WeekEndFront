@@ -10,14 +10,14 @@
 
 
 angular.module('weekEndProjectApp')
-  .service('Person',['$resource', 'urlWeek',function ($resource,urlWeek) {
+  .service('Person',['$resource', 'urlWeekTest',function ($resource,urlWeekTest) {
 
-  var urlBase = '/persons/';
+  var urlBase = '/users/';
 
     this.getPerson = function (id) {
       console.log(urlBase);
-      console.log(urlWeek);
-      var Person = $resource(urlWeek+urlBase+':id/', {id:'@id'});
+      console.log(urlWeekTest);
+      var Person = $resource(urlWeekTest+urlBase+':id/', {id:'@id'});
       var person = Person.get({id:id}).$promise.then(function(data) {
         return (data.toJSON());
       });

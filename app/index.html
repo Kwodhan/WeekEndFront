@@ -14,12 +14,41 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="weekEndProjectApp">
+  <body ng-app="weekEndProjectApp" ng-controller="ApplicationController">
 
     <div ng-controller="MainCtrl">
         <label>Id <input ng-model="person.firstname"></label><br>
-        <button ng-click="go()">Go!</button>
+
+        <button ng-click="get()">Get Users!</button>
+
+          <button ng-click="location()">Get Location!</button>
+
+
+
     </div>
+    <div ng-if="currentUser">Welcome, {{ currentUser.pseudo }}</div>
+<div ng-if="isAuthorized(userRoles.admin)">You're admin.</div>
+<div ng-if="isAuthorized(userRoles.editor)">You're editor.</div>
+<!-- <div ng-switch on="currentUser.role">
+  <div ng-switch-when="userRoles.admin">You're admin.</div>
+  <div ng-switch-when="userRoles.editor">You're editor.</div>
+</div> -->
+<div ng-controller="LoginController">
+    <form name="loginForm" ng-controller="LoginController"
+      ng-submit="login(credentials)" novalidate>
+  <label for="username">Username:</label>
+  <input type="text" id="username"
+         ng-model="credentials.pseudo">
+  <label for="password">Password:</label>
+  <input type="password" id="password"
+         ng-model="credentials.password">
+  <button type="submit">Login</button>
+
+</form>
+<button ng-click="login()">Register</button>
+<button ng-click="logout()">Logout</button>
+
+  </div>
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -90,12 +119,17 @@
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/applicationcontroller.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
-        <script src="scripts/services/weekend.js"></script>
         <script src="scripts/services/person.js"></script>
-        <script src="scripts/services/urlweek.js"></script>
+        <script src="scripts/services/constant.js"></script>
         <script src="scripts/services/auth.js"></script>
+        <script src="scripts/controllers/logincontroller.js"></script>
+        <script src="scripts/services/authenticationservice.js"></script>
+        <script src="scripts/services/location.js"></script>
+        <script src="scripts/services/authservice.js"></script>
+        <script src="scripts/services/session.js"></script>
         <!-- endbuild -->
 </body>
 </html>
