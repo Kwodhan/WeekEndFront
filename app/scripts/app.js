@@ -15,22 +15,48 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'uiGmapgoogle-maps'
   ])
-  .config(['$httpProvider','$routeProvider','USER_ROLES',function ($httpProvider,$routeProvider,USER_ROLES) {
+  .config(['$httpProvider','$routeProvider','USER_ROLES','uiGmapGoogleMapApiProvider',function ($httpProvider,$routeProvider,USER_ROLES,GoogleMapApiProviders) {
+    GoogleMapApiProviders.configure({
+		key: 'AIzaSyAau09m1LQhDtd3YJvZ9mJYH91RRN4JOCU', //Clé pour utiliser l'API
+		libraries: 'geometry,visualization' //Librairies supplémentaires
+	 });
+
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
+        templateUrl: '/views/main.html',
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
       .when('/about', {
-        templateUrl: 'views/about.html',
+        templateUrl: '/views/about.html',
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
+      .when('/login', {
+        templateUrl: '/views/login.html',
+        controller: 'LoginCtrl',
+        controllerAs: 'login'
+      })
+      .when('/activities', {
+        templateUrl: '/views/listactivities.html',
+        controller: 'ListActivitiesCtrl',
+        controllerAs: 'activities'
+      })
+      .when('/locations', {
+        templateUrl: '/views/listlocations.html',
+        controller: 'ListLocationsCtrl',
+        controllerAs: 'activities'
+      })
+      .when('/gerant/sites', {
+        templateUrl: '/views/listsite.html',
+        controller: 'ListsiteCtrl',
+        controllerAs: 'sites'
+      })
       .when('/stop', {
-        templateUrl: 'views/about.html',
+        templateUrl: '/views/about.html',
         controller: 'AboutCtrl',
         controllerAs: 'about',
         data: {
@@ -41,7 +67,7 @@ angular
         redirectTo: '/'
       });
 
-       $httpProvider.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
+
   }])
   .run(['$rootScope','$http','$location', 'AUTH_EVENTS', 'AuthService',function ($rootScope, $http, $location,AUTH_EVENTS, AuthService) {
         // keep user logged in after page refresh

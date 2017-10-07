@@ -1,0 +1,19 @@
+<div >
+<ui-gmap-google-map events="map.events" center='map.center' zoom='map.zoom'>
+  <ui-gmap-marker ng-repeat="marker in markers" idKey="marker.id" coords="marker.coord" icon="marker.icon" click="click(marker)">
+       <ui-gmap-window show="marker.show" ng-cloak closeClick="!marker.show" templateUrl="'views/markerview.html'" templateParameter="{marker:marker, currentUser : currentUser , scope : scope}">
+
+       </ui-gmap-window>
+   </ui-gmap-marker>
+</ui-gmap-google-map>
+
+<br>
+<div class="panel panel-primary" ng-repeat="element in markers" >
+  <div class="panel-heading">{{element.city}}</div>
+    <div class="panel-body">
+      {{element.region}}
+      <div ng-if="currentUser && !isLocations(element.id)">  <button class="btn btn-primary" ng-click="ajouter(element.id)">Ajouter ce logement</button></div>
+      <div ng-if="currentUser && isLocations(element.id)">  <button class="btn btn-primary" ng-click="enlever(element.id)">Enlever ce logement</button></div>
+    </div>
+  </div>
+</div>

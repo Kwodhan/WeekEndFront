@@ -29,8 +29,8 @@ notAuthorized: 'auth-not-authorized'
 
   angular.module('weekEndProjectApp')
   .constant('USER_ROLES', {
-  all: '*',
   admin: 'ROLE_ADMIN',
-  editor: 'ROLE_EDITOR',
+  gerant: 'ROLE_GERANT',
+    user: 'ROLE_USER',
   guest: 'ROLE_GUEST'
 })

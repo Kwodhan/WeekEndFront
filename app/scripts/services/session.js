@@ -9,15 +9,14 @@
  */
 angular.module('weekEndProjectApp')
 .service('Session', function () {
-  this.create = function (userId, userRole,basic) {
-    console.log(userRole);
-    this.userId = userId;
+  this.create = function (user, userRole,basic) {
+    this.user = user;
     this.userRole = userRole;
     this.basic = basic;
   };
   this.destroy = function () {
 
-    this.userId = null;
+    this.user = null;
     this.userRole = null;
     this.basic = null;
   };

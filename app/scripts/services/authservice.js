@@ -13,28 +13,41 @@ angular.module('weekEndProjectApp')
 var urlBase = '/auth/';
 
 
-  authService.login = function (credentials) {
+  authService.registration = function (credentials) {
 
       var basic ="Basic "+ btoa(credentials.pseudo+':'+credentials.password);
     return $http
       .post(urlWeekTest+urlBase+'registration', credentials)
       .then(function (res) {
-        console.log(res);
-        Session.create(res.data.pseudo ,
+
+        Session.create(res.data ,
                        res.data.roles[0],basic);
-          $http.defaults.headers.common.Authorization = basic;
-        var user= {pseudo:credentials.pseudo};
-        return user;
+          // $http.defaults.headers.common.Authorization = basic;
+        return res.data;
+      });
+  };
+
+  authService.login = function (credentials) {
+
+      var basic ="Basic "+ btoa(credentials.pseudo+':'+credentials.password);
+    return $http
+      .post(urlWeekTest+urlBase+'login', credentials)
+      .then(function (res) {
+
+        Session.create(res.data ,
+                       res.data.roles[0],basic);
+          // $http.defaults.headers.common.Authorization = basic;
+        return res.data;
       });
   };
 
   authService.logout = function () {
     Session.destroy();
-    $http.defaults.headers.common.Authorization = '';
+    // $http.defaults.headers.common.Authorization = '';
   };
 
   authService.isAuthenticated = function () {
-    return !!Session.userId;
+    return !!Session.user;
   };
 
   authService.isAuthorized = function (authorizedRoles) {

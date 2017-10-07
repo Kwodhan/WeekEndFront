@@ -1,0 +1,14 @@
+<div >
+  <div class="row">
+    <div class="col-sm-4 col-xs-5" ng-repeat="element in liste">
+      <div class="thumbnail">
+        <img src="http://placehold.it/250x150&text=img1" alt="">
+        <div class="caption">
+          <h4>{{element.name}}</h4>
+        <div ng-if="currentUser && !isActivities(element.id)">  <button class="btn btn-primary" ng-click="ajouter(element.id)">Ajouter comme favorie</button></div>
+        <div ng-if="currentUser && isActivities(element.id)">  <button class="btn btn-primary" ng-click="enlever(element.id)">Enlever comme favorie</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
