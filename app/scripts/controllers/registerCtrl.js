@@ -8,26 +8,23 @@
  * Controller of the weekEndProjectApp
  */
 angular.module('weekEndProjectApp')
-.controller('LoginCtrl', function ($scope, $rootScope, AUTH_EVENTS, AuthService) {
+.controller('RegisterCtrl',['$scope', '$rootScope','$location', 'AUTH_EVENTS', 'AuthService',function ($scope, $rootScope,$location, AUTH_EVENTS, AuthService) {
   $scope.credentials = {
     pseudo: '',
-    password: ''
+    password: '',
+    emailAddress:''
   };
 
-  $scope.login = function (credentials) {
 
-    AuthService.login(credentials).then(function (user) {
+  $scope.register = function (credentials) {
+    AuthService.registration(credentials).then(function (user) {
       $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
       $scope.setCurrentUser(user);
+      $location.path('/');
     }, function () {
       $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
     });
   };
 
-  $scope.logout = function (credentials) {
-    AuthService.logout();
-    $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
-    $scope.setCurrentUser(null);
-  };
 
-})
+}]);

@@ -1,154 +1,189 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(.) styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
-  </head>
-  <body ng-app="weekEndProjectApp" ng-controller="ApplicationCtrl">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css(.) styles/vendor.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+</head>
+<body ng-app="weekEndProjectApp" ng-controller="ApplicationCtrl">
 
 
 
 
-    <!-- <div ng-if="currentUser">Welcome, {{ currentUser.pseudo }}</div>
-<div ng-if="isAuthorized(userRoles.admin)">You're admin.</div>
-<div ng-if="isAuthorized(userRoles.user)">You're admin.</div>
-<div ng-if="isAuthorized(userRoles.editor)">You're editor.</div> -->
-<!-- <div ng-switch on="currentUser.role">
+  <!-- <div ng-if="currentUser">Welcome, {{ currentUser.pseudo }}</div>
+  <div ng-if="isAuthorized(userRoles.admin)">You're admin.</div>
+  <div ng-if="isAuthorized(userRoles.user)">You're admin.</div>
+  <div ng-if="isAuthorized(userRoles.editor)">You're editor.</div> -->
+  <!-- <div ng-switch on="currentUser.role">
   <div ng-switch-when="userRoles.admin">You're admin.</div>
   <div ng-switch-when="userRoles.editor">You're editor.</div>
 </div> -->
 
-    <!--[if lte IE 8]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+<!--[if lte IE 8]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
 
-    <!-- Add your site or application content here -->
+<!-- Add your site or application content here -->
 
 
-          <nav class="navbar navbar-primary" role="navigation">
-            <div class="container-fluid">
-              <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex2-collapse">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand">WeekEndProject</a>
-              </div>
-              <div class="collapse navbar-collapse navbar-ex2-collapse">
-                <ul class="nav navbar-nav">
-                  <li class="active"><a href="#!/">Accueil</a></li>
-                </ul>
-                <!-- <form class="navbar-form navbar-left" role="search">
+<nav class="navbar navbar-primary" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex2-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand">WeekEndProject</a>
+    </div>
+    <div class="collapse navbar-collapse navbar-ex2-collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#!/">Accueil</a></li>
+      </ul>
+      <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+      <input type="text" class="form-control" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-primary"><i class="icon icon-search"></i></button>
+  </form> -->
+
+  <ul class="nav navbar-nav navbar-left">
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+      <ul class="dropdown-menu dropdown-menu-primary">
+        <li><a ng-href="#!/activities">Choose your Activities</a></li>
+        <li><a ng-href="#!/locations">Choose your Homes</a></li>
+        <li class="divider"></li>
+        <li><a ng-href="#!/gerant/addsite">Add Site</a></li>
+        <li><a ng-href="#!/gerant/sites">Update Site</a></li>
+      </ul>
+    </li>
+    <li class="navbar-text" ng-if="currentUser">Bienvenue {{ currentUser.pseudo }}</li>
+  </ul>
+  <ul class="nav navbar-nav navbar-right" ng-controller="LoginCtrl" >
+    <li ng-if="currentUser" ><a ng-click="logout()">Logout</a></li>
+
+      <li class="dropdown" ng-if="!currentUser" >
+        <a  class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+        <ul id="login-dp" class="dropdown-menu" >
+          <li>
+            <div class="row">
+              <div class="col-md-12">
+                <form class="form" role="form"   ng-submit="login(credentials)" accept-charset="UTF-8" id="login-nav">
+
+
                   <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <label class="sr-only" >Pseudo</label>
+                    <input type="text" class="form-control" ng-model="credentials.pseudo" placeholder="Pseudo" required>
                   </div>
-                  <button type="submit" class="btn btn-primary"><i class="icon icon-search"></i></button>
-                </form> -->
+                  <div class="form-group">
+                    <label class="sr-only">Password</label>
+                    <input type="password" class="form-control" ng-model="credentials.password" placeholder="Password" required>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                  </div>
 
-                <ul class="nav navbar-nav navbar-left">
-                  <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                    <ul class="dropdown-menu dropdown-menu-primary">
-                      <li><a ng-href="#!/activities">Choose your Activities</a></li>
-                      <li><a ng-href="#!/locations">Choose your Homes</a></li>
-                        <li class="divider"></li>
-                      <li><a ng-href="#!/gerant/sites">Sites</a></li>
-                    </ul>
-                  </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-center">
-                  <ul class="nav navbar-nav">
-                    <li ng-if="currentUser" class="active"><a href="#!/login">Logout</a></li>
-                    <li ng-if="!currentUser" class="active"><a href="#!/login">Login</a></li>
-                  </ul>
-                </ul>
-                <p class="navbar-text">{{ currentUser.pseudo }}</p>
+                </form>
+              </div>
+              <div class="bottom text-center">
+                New here ? <a href="#!/register"><b>Join Us</b></a>
               </div>
             </div>
-          </nav>
+          </li>
+        </ul>
+      </li>
+
+  </ul>
+
+</div>
+</div>
+</nav>
 
 
-    <div class="container">
-    <div ng-view=""></div>
-    </div>
+<div class="container">
+  <div ng-view=""></div>
+</div>
 
-    <div class="footer">
-      <div class="container">
+<div class="footer">
+  <div class="container">
 
-      </div>
-    </div>
-
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
-       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
-    </script>
-
-    <!-- build:js(.) scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
-    <!-- endbower -->
-    <script src="bower_components/lodash/lodash.js"></script>
-    <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
-    <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
-    <!-- endbuild -->
-
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/applicationCtrl.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/about.js"></script>
-        <script src="scripts/controllers/listactivitiesCtrl.js"></script>
-        <script src="scripts/controllers/listlocationsCtrl.js"></script>
-        <script src="scripts/controllers/loginCtrl.js"></script>
-        <script src="scripts/controllers/markerCtrl.js"></script>
-        <script src="scripts/controllers/listsiteCtrl.js"></script>
+  </div>
+</div>
 
 
-        <script src="scripts/services/constant.js"></script>
-        <script src="scripts/services/auth.js"></script>
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+<script>
+  !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+    (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
+    r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
+  }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-XXXXX-X');
+  ga('send', 'pageview');
+</script>
+
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<!-- endbower -->
+<script src="bower_components/lodash/lodash.js"></script>
+<script src="bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
+<script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+<!-- endbuild -->
+
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<script src="scripts/app.js"></script>
+<script src="scripts/controllers/applicationCtrl.js"></script>
+<script src="scripts/controllers/main.js"></script>
+<script src="scripts/controllers/about.js"></script>
+<script src="scripts/controllers/listactivitiesCtrl.js"></script>
+<script src="scripts/controllers/listlocationsCtrl.js"></script>
+<script src="scripts/controllers/loginCtrl.js"></script>
+<script src="scripts/controllers/registerCtrl.js"></script>
+<script src="scripts/controllers/markerCtrl.js"></script>
+<script src="scripts/controllers/listsiteGerantCtrl.js"></script>
+<script src="scripts/controllers/createsiteGerantCtrl.js"></script>
+<script src="scripts/controllers/updatesiteGerantCtrl.js"></script>
 
 
-        <script src="scripts/services/authservice.js"></script>
-        <script src="scripts/services/session.js"></script>
+<script src="scripts/services/constant.js"></script>
+<script src="scripts/services/auth.js"></script>
 
-        <script src="scripts/services/activitiesRest.js"></script>
-        <script src="scripts/services/userRest.js"></script>
-        <script src="scripts/services/locationsRest.js"></script>
-        <script src="scripts/services/personsRest.js"></script>
 
-        <script src="scripts/bullshitFactory/updateUserPUT.js"></script>
-        <script src="scripts/bullshitFactory/updateLocationPUT.js"></script>
+<script src="scripts/services/authservice.js"></script>
+<script src="scripts/services/session.js"></script>
 
-        <script src="scripts/services/siterest.js"></script>
-        <!-- endbuild -->
+<script src="scripts/services/activitiesRest.js"></script>
+<script src="scripts/services/userRest.js"></script>
+<script src="scripts/services/locationsRest.js"></script>
+<script src="scripts/services/personsRest.js"></script>
+
+<script src="scripts/bullshitFactory/updateUserPUT.js"></script>
+<script src="scripts/bullshitFactory/updateSitePUT.js"></script>
+
+<script src="scripts/services/siterest.js"></script>
+
+<script src="scripts/controllers/getsport.js"></script>
+<!-- endbuild -->
 
 </body>
 </html>

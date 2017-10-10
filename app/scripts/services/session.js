@@ -1,12 +1,12 @@
 'use strict';
 
 /**
- * @ngdoc service
- * @name weekEndProjectApp.Session
- * @description
- * # Session
- * Service in the weekEndProjectApp.
- */
+* @ngdoc service
+* @name weekEndProjectApp.Session
+* @description
+* # Session
+* Service in the weekEndProjectApp.
+*/
 angular.module('weekEndProjectApp')
 .service('Session', function () {
   this.create = function (user, userRole,basic) {

@@ -1,0 +1,51 @@
+<form name="form" ng-submit="submit()">
+
+  <h4>1. Choose a Name</h4>
+  <label>Nom : </label>
+  <input name="name" type="text" ng-model="name" required ng-minlength="2" ng-maxlength="45" />
+  <div ng-messages="form.name.$error" ng-messages-include="erreurs.html"></div>
+
+
+  <br>
+  <div>
+    <h4>2. Choose a Location</h4>
+    <ui-gmap-google-map events="map.events" center='map.center' zoom='map.zoom'>
+      <ui-gmap-marker required ng-repeat="marker in markers" idKey="marker.id" coords="marker.coord" icon="marker.icon" click="click(marker)">
+        <ui-gmap-window show="marker.show" ng-cloak closeClick="!marker.show" templateUrl="'views/markerview.html'" templateParameter="{marker:marker, currentUser : currentUser , scope : scope}">
+
+        </ui-gmap-window>
+      </ui-gmap-marker>
+    </ui-gmap-google-map>
+    
+    <br>
+    <div class="panel panel-primary" ng-repeat="element in markers" >
+      <div class="panel-heading">{{element.city}}</div>
+      <div class="panel-body">
+        {{element.region}}
+      </div>
+    </div>
+  </div>
+  <h4>3. Choose Sports</h4>
+  <div>
+    <select required ng-model="sport">
+      <option ng-repeat="element in listeSport" ng-value="element.id">{{ element.name }}<option/>
+      </select>
+      <button type='button' ng-click="addSport()">Add Sport</button>
+
+      <div >
+        <div class="row">
+          <div class="col-sm-4 col-xs-5" ng-repeat="element in sports">
+            <div class="thumbnail">
+              <img src="http://placehold.it/250x150&text=img1" alt="">
+              <div class="caption">
+                <h4>{{element.name}}</h4>
+                <button type='button' ng-click="removeSport(element)">remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <input type="submit" value="Envoyer" />
+  </form>
