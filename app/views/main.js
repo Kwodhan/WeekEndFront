@@ -7,11 +7,11 @@
 * # MainCtrl
 * Controller of the weekEndProjectApp
 */
-angular.module('weekEndProjectApp')
+angular.module('weekEndApp')
 .controller('MainCtrl', function () {
 
 
-  
+
 
 
 });

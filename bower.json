@@ -1,5 +1,5 @@
 {
-  "name": "week-end-project",
+  "name": "week-end",
   "version": "0.0.0",
   "dependencies": {
     "angular": "^1.4.0",
@@ -15,7 +15,7 @@
     "angular-mocks": "^1.4.0"
   },
   "appPath": "app",
-  "moduleName": "weekEndProjectApp",
+  "moduleName": "weekEndApp",
   "overrides": {
     "bootstrap": {
       "main": [
