@@ -10,7 +10,10 @@ angular.module('weekEndApp', [
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
+    'ngMessages',
+    'ngStorage'
+
   ])
   .config(['$httpProvider','$routeProvider','USER_ROLES','uiGmapGoogleMapApiProvider',function ($httpProvider,$routeProvider,USER_ROLES,GoogleMapApiProviders) {
   GoogleMapApiProviders.configure({
@@ -72,13 +75,15 @@ angular.module('weekEndApp', [
   });
 
 
+
+
 }])
-.run(['$rootScope','$http','$location', 'AUTH_EVENTS', 'AuthService',function ($rootScope, $http, $location,AUTH_EVENTS, AuthService) {
+.run(['$rootScope','$http','$location', 'AUTH_EVENTS', 'AuthService','$localStorage',function ($rootScope, $http, $location,AUTH_EVENTS, AuthService,$localStorage) {
   // keep user logged in after page refresh
 
-  // if ($localStorage.currentUser) {
-  //     $http.defaults.headers.common.Authorization = $localStorage.currentUser.basic;
-  // }
+// if ($localStorage.currentUser) {
+//   Session.create($localStorage.currentUser.user,$localStorage.currentUser.role,$localStorage.basic);
+// }
 
   // redirect to login page if not logged in and trying to access a restricted page
   // $rootScope.$on('$locationChangeStart', function (event, next, current) {

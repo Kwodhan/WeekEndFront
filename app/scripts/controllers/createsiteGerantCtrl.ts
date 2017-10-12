@@ -9,8 +9,8 @@
 * Controller of the weekEndApp
 */
 angular.module('weekEndApp')
-.controller('CreatesiteGerantCtrl',  ['$scope','LocationsRest','ActivitiesRest','SitesRest','UserRest','$http',
-function ($scope, LocationsRest,ActivitiesRest,SitesRest,UserRest,$http) {
+.controller('CreatesiteGerantCtrl',  ['$scope','LocationsRest','ActivitiesRest','SitesRest','UserRest','$http',  '$location',
+function ($scope, LocationsRest,ActivitiesRest,SitesRest,UserRest,$http,$location) {
   $scope.markers = [];
   $scope.sports =[];
   var promise = ActivitiesRest.getActivities();
@@ -26,9 +26,6 @@ function ($scope, LocationsRest,ActivitiesRest,SitesRest,UserRest,$http) {
     click: function(mapModel, eventName, originalEventArgs)
     {
       var e = originalEventArgs[0];
-
-
-
       onPositionUpdate(e.latLng.lat(),e.latLng.lng());
     },
 
@@ -43,7 +40,17 @@ function ($scope, LocationsRest,ActivitiesRest,SitesRest,UserRest,$http) {
       if(containt(data,$scope.markers)){
         return;
       }
-      $scope.markers[$scope.markers.length-1].id=data.id;
+
+      $scope.markers = [{
+        coord: {
+          latitude: data.latitude,
+          longitude: data.longitude
+        },
+        city: data.city,
+        region: data.region,
+        show:true,
+        id: data.id
+      }];
 
 
 
@@ -60,22 +67,14 @@ function ($scope, LocationsRest,ActivitiesRest,SitesRest,UserRest,$http) {
   }
   function onPositionUpdate(latitude,longitude) {
 
-    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&sensor=true";
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key="+"AIzaSyAau09m1LQhDtd3YJvZ9mJYH91RRN4JOCU";
     $http.get(url)
     .then(function(result) {
 
       var address = searchCityRegion(result.data.results);
 
       if(address.city && address.region){
-        $scope.markers = [{
-          coord: {
-            latitude: latitude,
-            longitude: longitude
-          },
-          city: address.city,
-          region: address.region,
-          id: 42
-        }];
+
         ajouterLocation({city:address.city , region:address.region,  latitude: latitude, longitude: longitude});
       }
 
@@ -107,7 +106,7 @@ function ($scope, LocationsRest,ActivitiesRest,SitesRest,UserRest,$http) {
 
     return {city :'', region : ''}
   }
-
+  // End Google map
   function containt(nameKey, myArray){
     for (var i=0; i < myArray.length; i++) {
       if (myArray[i].id === nameKey.id) {
@@ -142,20 +141,22 @@ function ($scope, LocationsRest,ActivitiesRest,SitesRest,UserRest,$http) {
 
 
   $scope.submit = function(){
-    if($scope.markers.length === 0){
+    console.log("merde");
+    if(!($scope.markers.length != 0 && $scope.name)){
       return;
-
     }
     SitesRest.postSite({
       name : $scope.name,
       activities:$scope.sports,
       locationid:$scope.markers[0].id}
-    );
-
+    ).then(function(result) {
+        $location.path('/gerant/sites');
+    });
+    
 
 
   }
 
-  // End Google map
+
 
 }]);

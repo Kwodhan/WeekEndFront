@@ -12,6 +12,8 @@ angular.module('weekEndApp')
 .controller('ListsitesGerantCtrl', ['$scope','SitesRest',function ($scope,SitesRest) {
   var promise = SitesRest.getSites();
   promise.then(function(data) {
+    console.log(data.data);
+    
     $scope.liste = data.data;
   });
 

@@ -1,23 +1,42 @@
 <div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/sun.ico" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#!/">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
-</div>
+<div class="container text-center">
 
-<div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
 
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
+      <h2>Welcome to WeekEndNotif</h2>
+      <div ng-if="!currentUser">
+        <p class="lead" >
+          <img src="images/pluie.jpg"><br>
 
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
+          Let us prepare your Week-end.
+        </p>
+      </div>
+      <div ng-if="currentUser">
+
+
+        <br>
+        <h4><strong>It's simple, You :</strong></h4>
+        <ul class="list-unstyled" >
+          <li>Choose your homes</li>
+          <li>Choose your favorites Activities (Sport, leisure)</li>
+          <li>It's Done!</li>
+        </ul>
+
+        <br>
+        <h4><strong>We :</strong></h4>
+        <h5>send a notification the Thuesday with :</h5>
+        <ul class="list-unstyled">
+          <li>The location of the site according to your preferences.</li>
+          <li>The Saturday and Sunday's Meteo.</li>
+        </ul>
+
+
+
+      </div>
+
+      <p><a ng-if="!currentUser" class="btn btn-lg btn-success" ng-href="#!/register">Let's Begin! <span class="glyphicon glyphicon-ok"></span></a></p>
+      <p><a ng-if="currentUser" class="btn btn-lg btn-success" ng-href="#!/locations">Choose your Home <span class="glyphicon glyphicon-home"></span></a>
+        <a ng-if="currentUser" class="btn btn-lg btn-info" ng-href="#!/activities">Choose your Activities <span class="glyphicon glyphicon-glass"></span></a>
+      </p>
+      <p></p>
+  </div>
 </div>

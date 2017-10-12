@@ -13,6 +13,7 @@ angular.module('weekEndApp')
 
   var promise = ActivitiesRest.getActivities();
   promise.then(function(data) {
+  
     $scope.liste = data.data;
   });
 

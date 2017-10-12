@@ -12,8 +12,6 @@
     <div class="panel-heading">{{element.city}}</div>
     <div class="panel-body">
       {{element.region}}
-      <div ng-if="currentUser && !isLocations(element.id)">  <button class="btn btn-primary" ng-click="ajouter(element.id)">Ajouter ce logement</button></div>
-      <div ng-if="currentUser && isLocations(element.id)">  <button class="btn btn-primary" ng-click="enlever(element.id)">Enlever ce logement</button></div>
     </div>
   </div>
 </div>

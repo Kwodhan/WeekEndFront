@@ -29,6 +29,7 @@ angular.module('weekEndApp')
   if($scope.currentUser){
     for(var home of $scope.currentUser.homes){
 
+
       $scope.markers.push({
         coord: {
           latitude: home.latitude,
@@ -36,6 +37,7 @@ angular.module('weekEndApp')
         },
         city: home.city,
         region: home.region,
+        show:true,
         icon:"{url: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569'}",
         id: home.id
       });
@@ -46,46 +48,50 @@ angular.module('weekEndApp')
   }
 
   function ajouterLocation(marker) {
-    var promise = LocationsRest.postLocation(marker);
-    promise.then(function(data) {
+    if($scope.currentUser){
+      var promise = LocationsRest.postLocation(marker);
+      promise.then(function(data) {
+  console.log(data);
+        if(containt(data,$scope.markers)){
+          return;
+        }
+        $scope.markers.push({
+          coord: {
+            latitude: data.latitude,
+            longitude: data.longitude
+          },
+          city: data.city,
+          region: data.region,
+          show:true,
+          icon:pin_url(data.city),
+          id: data.id
+        });
 
-      if(containt(data,$scope.markers)){
-        return;
-      }
-      $scope.markers[$scope.markers.length-1].id=data.id;
+        ajouter(data.id);
 
-
-    });
+      });
+    }
 
   }
 
   $scope.click =  function(marker) {
+
     if(!$scope.currentUser ){
       remove(marker,$scope.markers);
-    }else if ($scope.currentUser && !$scope.isLocations(marker.id)){
+    }else if ($scope.currentUser ){
+
       remove(marker,$scope.markers);
+      enlever(marker.id);
     }
   }
   function onPositionUpdate(latitude,longitude) {
-    console.log("merde");
-    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&sensor=true";
+
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key="+"AIzaSyAau09m1LQhDtd3YJvZ9mJYH91RRN4JOCU";
     $http.get(url)
     .then(function(result) {
-
       var address = searchCityRegion(result.data.results);
-      console.log(address);
       if(address.city && address.region){
-        $scope.markers.push({
-          coord: {
-            latitude: latitude,
-            longitude: longitude
-          },
-          city: address.city,
-          region: address.region,
-          show:true,
-          icon:pin_url(address.city),
-          id: 42
-        });
+
         ajouterLocation({city:address.city , region:address.region,  latitude: latitude, longitude: longitude});
       }
 
@@ -104,14 +110,18 @@ angular.module('weekEndApp')
   }
 
 
-  $scope.ajouter = function(id) {
+function ajouter(id) {
     var promise = UserRest.addHome(id);
     promise.then(function(data) {
+      console.log(data);
       $scope.setCurrentUser(data);
+    },function(data) {
+      console.log(data);
+
     });
   }
 
-  $scope.enlever = function(id) {
+function enlever(id) {
     var promise = UserRest.removeHome(id);
     promise.then(function(data) {
       $scope.setCurrentUser(data);
@@ -132,8 +142,6 @@ angular.module('weekEndApp')
     for (var type of data) {
       if(type.types[0]==="locality"){
         return {city : type.address_components[0].long_name, region : type.address_components[1].long_name}
-      }else{
-        console.log("merde");
       }
 
     }

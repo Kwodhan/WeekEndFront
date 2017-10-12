@@ -12,12 +12,26 @@
 angular.module('weekEndApp')
 .controller('ApplicationCtrl', function ($scope,
   USER_ROLES,
-  AuthService) {
-    $scope.currentUser = null;
-    $scope.userRoles = USER_ROLES;
-    $scope.isAuthorized = AuthService.isAuthorized;
+  AuthService,$localStorage) {
+    initController();
+
+    function initController() {
+
+      if($localStorage.currentUser){
+        $scope.currentUser = $localStorage.currentUser.user;
+        $scope.userRoles = USER_ROLES;
+        $scope.isAuthorized = AuthService.isAuthorized;
+      }
+      else{
+        $scope.currentUser = null;
+        $scope.userRoles = USER_ROLES;
+        $scope.isAuthorized = AuthService.isAuthorized;
+      }
+    }
+
 
     $scope.setCurrentUser = function (user) {
+      $localStorage.currentUser.user = user;
       $scope.currentUser = user;
     };
   })

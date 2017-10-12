@@ -9,7 +9,7 @@
 * Service in the weekEndApp.
 */
 angular.module('weekEndApp')
-.service('SitesRest',['$resource', 'urlWeekTest','Session','UpdateSite',function ($resource,urlWeekTest,Session,UpdateSite) {
+.service('SitesRest',['$resource', 'urlWeekTest','$localStorage','UpdateSite',function ($resource,urlWeekTest,$localStorage,UpdateSite) {
 
   var urlBase = '/sites/';
 
@@ -17,7 +17,7 @@ angular.module('weekEndApp')
     var Site = $resource(urlWeekTest+urlBase+':id/', {id:'@id'}, {
       get: {
         method: 'GET',
-        headers: { 'Authorization': Session.basic }
+        headers: { 'Authorization': $localStorage.currentUser.basic }
       }
     });
     var site = Site.get({id:id}).$promise.then(function(data) {
@@ -31,7 +31,7 @@ angular.module('weekEndApp')
     var Site = $resource(urlWeekTest+urlBase,{}, {
       get: {
         method: 'GET',
-        headers: { 'Authorization': Session.basic }
+        headers: { 'Authorization': $localStorage.currentUser.basic }
       }
     });
     var sites = Site.get().$promise.then(function(data) {
@@ -45,7 +45,7 @@ angular.module('weekEndApp')
       {
         save: {
           method: 'POST',
-          headers: { 'Authorization': Session.basic }
+          headers: { 'Authorization': $localStorage.currentUser.basic }
         }
       });
       var sites = Site.save({

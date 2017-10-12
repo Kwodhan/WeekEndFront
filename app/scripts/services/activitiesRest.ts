@@ -9,15 +9,15 @@
 * Service in the weekEndApp.
 */
 angular.module('weekEndApp')
-.service('ActivitiesRest', ['$resource', 'urlWeekTest','Session',function ($resource,urlWeekTest,Session) {
+.service('ActivitiesRest', ['$resource', 'urlWeekTest','$localStorage',function ($resource,urlWeekTest, $localStorage) {
 
   var urlBase = '/activities/';
 
-  this.getActivity = function (id) {
+this.getActivity = function(id) {
     var Activity = $resource(urlWeekTest+urlBase+':id/', {id:'@id'},{
       get: {
         method: 'GET',
-        headers: { 'Authorization': Session.basic }
+        headers: { 'Authorization': ($localStorage.currentUser ? $localStorage.currentUser.basic : '') }
       }
     });
     var activity = Activity.get({id:id}).$promise.then(function(data) {
@@ -26,11 +26,11 @@ angular.module('weekEndApp')
     return activity.data[0];
   };
 
-  this.getActivities = function () {
+this.getActivities = function() {
     var Activity = $resource(urlWeekTest+urlBase,{},{
       get: {
         method: 'GET',
-        headers: { 'Authorization': Session.basic }
+        headers: { 'Authorization': ($localStorage.currentUser ? $localStorage.currentUser.basic : '')  }
       }
     });
     var activities = Activity.get().$promise.then(function(data) {

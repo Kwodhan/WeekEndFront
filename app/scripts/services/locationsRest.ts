@@ -9,7 +9,7 @@
 * Service in the weekEndApp.
 */
 angular.module('weekEndApp')
-.service('LocationsRest',['$resource', 'urlWeekTest','Session',function ($resource,urlWeekTest,Session) {
+.service('LocationsRest',['$resource', 'urlWeekTest','$localStorage',function ($resource,urlWeekTest,$localStorage) {
 
   var urlBase = '/locations/';
 
@@ -17,7 +17,7 @@ angular.module('weekEndApp')
     var Location = $resource(urlWeekTest+urlBase+':id/', {id:'@id'}, {
       get: {
         method: 'GET',
-        headers: { 'Authorization': Session.basic }
+        headers: { 'Authorization': ($localStorage.currentUser? $localStorage.currentUser.basic : '') }
       }
     });
     var location = Location.get({id:id}).$promise.then(function(data) {
@@ -30,7 +30,7 @@ angular.module('weekEndApp')
     var Location = $resource(urlWeekTest+urlBase,{}, {
       get: {
         method: 'GET',
-        headers: { 'Authorization': Session.basic }
+        headers: { 'Authorization': ($localStorage.currentUser? $localStorage.currentUser.basic : '') }
       }
     });
     var locations = Location.get().$promise.then(function(data) {
@@ -44,7 +44,7 @@ angular.module('weekEndApp')
       {
         save: {
           method: 'POST',
-          headers: { 'Authorization': Session.basic }
+          headers: { 'Authorization': ($localStorage.currentUser? $localStorage.currentUser.basic : '') }
         }
       });
       var locations = Location.save({

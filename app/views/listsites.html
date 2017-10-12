@@ -1,6 +1,13 @@
 <div >
+  <div class="jumbotron ">
+     <h3>Search</h3> 
+  <h4>Name <input class="form-control" ng-model="searchName"></h4>
+  <br/>
+  <h4>Ville <input class="form-control" ng-model="searchCity"></h4>
+  <br/>
+</div>
   <div class="row">
-    <div class="col-sm-4 col-xs-5" ng-repeat="element in liste">
+    <div class="col-sm-4 col-xs-5" ng-repeat="element in liste| filter:{name:searchName} | filter:{location: {city: searchCity}}">
       <div class="thumbnail">
         <img src="http://placehold.it/250x150&text=img1" alt="">
         <div class="caption">

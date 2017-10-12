@@ -1,19 +1,49 @@
-<div>
 
-  <form ng-controller="RegisterCtrl"
-  ng-submit="register(credentials)">
-  <label for="username">Username:</label>
-  <input type="text" id="username"
-  ng-model="credentials.pseudo"><br>
-  <label for="password">Password:</label>
-  <input type="password" id="password"
-  ng-model="credentials.password"><br>
-  <label for="email">Email:</label>
-  <input type="email" id="email"
-  ng-model="credentials.emailAddress"><br>
-  <button type="submit">Register</button>
+<div ng-controller="RegisterCtrl">
+  <form  novalidate ng-submit="form.$valid && register(credentials)" name="form" >
+    <div  iv class="form-group">
 
-  </form>
+      <label  for="username">Pseudo (6 or more characters)</label>
+      <input class="form-control" type="text" id="username" name="pseudo" ng-model="credentials.pseudo" ng-minlength="6" ng-maxlength="30" required >
+      <div ng-messages="form.pseudo.$error" ng-if="form.$submitted" role="alert">
+        <div ng-message="required" class="text-danger">Please enter a pseudo</div>
+
+        <div ng-message="minlength" class="text-danger">Your pseudo is too short</div>
+
+        <div ng-message="maxlength" class="text-danger">Your pseudo is too long</div>
+
+
+      </div>
+        <div ng-if="errors" class="text-danger">{{errors}}</div>
+
+      <br>
+
+    <label for="password">Password</label>
+    <input class="form-control" type="password" id="password" name="password"  ng-model="credentials.password" ng-minlength="6" ng-maxlength="60" required>
+    <div ng-messages="form.password.$error" ng-if="form.$submitted" role="alert">
+      <div ng-message="required" class="text-danger" >Please enter a password</div>
+      <div ng-message="minlength" class="text-danger">Your password is too short</div>
+      <div ng-message="maxlength" class="text-danger">Your password is too long</div>
+
+    </div>
+
+
+      <br>
+
+    <label  for="email">Email</label>
+    <input class="form-control" type="email" id="email" name="email" ng-model="credentials.emailAddress" required>
+    <div ng-messages="form.email.$error" ng-if="form.$submitted" role="alert">
+      <div ng-message="required" class="text-danger">Please enter an email address</div>
+      <div ng-message="email" class="text-danger">Must be a valid email address</div>
+    </div>
+
+      <br>
+
+
+
+  <button class="btn btn-primary" type="submit">Register</button>
+</div>
+</form>
 
 
 </div>

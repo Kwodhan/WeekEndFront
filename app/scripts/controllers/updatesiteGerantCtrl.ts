@@ -10,8 +10,8 @@
 */
 
 angular.module('weekEndApp')
-.controller('UpdatesiteGerantCtrl',['$scope','$http','LocationsRest','SitesRest','$routeParams','ActivitiesRest',
-function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest) {
+.controller('UpdatesiteGerantCtrl',['$scope','$http','LocationsRest','SitesRest','$routeParams','ActivitiesRest','$location',
+function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest,$location) {
 
   var site = SitesRest.getSite($routeParams.id);
   site.then(function(data) {
@@ -65,7 +65,16 @@ function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest) {
         return;
       }
 
-      $scope.markers[$scope.markers.length-1].id=data.id;
+      $scope.markers = [{
+        coord: {
+          latitude: data.latitude,
+          longitude: data.longitude
+        },
+        city: data.city,
+        region: data.region,
+        show:true,
+        id: data.id
+      }];
 
 
     });
@@ -77,21 +86,13 @@ function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest) {
   }
   function onPositionUpdate(latitude,longitude) {
 
-    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&sensor=true";
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key="+"AIzaSyAau09m1LQhDtd3YJvZ9mJYH91RRN4JOCU";
     $http.get(url)
     .then(function(result) {
 
       var address = searchCityRegion(result.data.results);
       if(address.city && address.region){
-        $scope.markers = [{
-          coord: {
-            latitude: latitude,
-            longitude: longitude
-          },
-          city: address.city,
-          region: address.region,
-          id: 42
-        }];
+
         ajouterLocation({city:address.city , region:address.region,  latitude: latitude, longitude: longitude});
       }
 
@@ -158,19 +159,22 @@ function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest) {
 
 
   $scope.submit = function(){
-    var location : string;
-    if($scope.markers.length === 0){
-       location = "";
-    }else{
-      location = $scope.markers[0].id;
+
+    if(!($scope.markers.length != 0 && $scope.name)){
+      return;
     }
     SitesRest.updateSite({
       id:$routeParams.id,
       name : $scope.name,
       activities:$scope.sports,
-      location:location
+      location:$scope.markers[0].id
     }
-  );
+
+  ).then(function(result) {
+      $location.path('/gerant/sites');
+  });
+
+
 
 
 

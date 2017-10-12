@@ -9,7 +9,7 @@
 * Factory in the weekEndApp.
 */
 angular.module('weekEndApp')
-.factory('AuthService', function ($http, Session,urlWeekTest) {
+.factory('AuthService', function ($http,urlWeekTest,$localStorage) {
 
   var urlBase = '/auth/';
 
@@ -21,10 +21,15 @@ angular.module('weekEndApp')
     .post(urlWeekTest+urlBase+'registration', credentials)
     .then(function (res) {
 
-      Session.create(res.data ,
-        res.data.roles[0],basic);
-        // $http.defaults.headers.common.Authorization = basic;
+
+        $localStorage.currentUser = {user : res.data ,role:
+          res.data.roles[0],basic:basic}
+
         return res.data;
+      },function (res) {
+
+          return null;
+
       });
     };
 
@@ -35,20 +40,25 @@ angular.module('weekEndApp')
       .post(urlWeekTest+urlBase+'login', credentials)
       .then(function (res) {
 
-        Session.create(res.data ,
-          res.data.roles[0],basic);
-          // $http.defaults.headers.common.Authorization = basic;
+
+          $localStorage.currentUser = {user : res.data ,role:
+            res.data.roles[0],basic:basic}
           return res.data;
-        });
+        },function (res) {
+          // 401 unauthorized
+          return null;
+
+        })
       };
 
       this.logout = function () {
-        Session.destroy();
-        // $http.defaults.headers.common.Authorization = '';
+
+        delete $localStorage.currentUser;
+
       };
 
       this.isAuthenticated = function () {
-        return !!Session.user;
+        return !!$localStorage.currentUser.user;
       };
 
       this.isAuthorized = function (authorizedRoles) {
@@ -56,7 +66,7 @@ angular.module('weekEndApp')
           authorizedRoles = [authorizedRoles];
         }
         return (this.isAuthenticated() &&
-        authorizedRoles.indexOf(Session.userRole) !== -1);
+        authorizedRoles.indexOf($localStorage.currentUser.role) !== -1);
       };
 
       return this;

@@ -11,7 +11,7 @@
 
 
 angular.module('weekEndApp')
-.service('PersonsRest',['$resource', 'urlWeekTest','Session',function ($resource,urlWeekTest,Session) {
+.service('PersonsRest',['$resource', 'urlWeekTest','$localStorage',function ($resource,urlWeekTest,$localStorage) {
 
   var urlBase = '/users/';
 
@@ -19,7 +19,7 @@ angular.module('weekEndApp')
     var Person = $resource(urlWeekTest+urlBase+':id/', {id:'@id'},{
       get: {
         method: 'GET',
-        headers: { 'Authorization': Session.basic }
+        headers: { 'Authorization': ($localStorage.currentUser? $localStorage.currentUser.basic : '') }
       }
     });
     var person = Person.get({id:id}).$promise.then(function(data) {

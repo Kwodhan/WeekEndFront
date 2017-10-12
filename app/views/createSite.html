@@ -1,51 +1,63 @@
-<form name="form" ng-submit="submit()">
+<form name="formSite" ng-submit="formSite.$valid && submit()" novalidate>
+  <div  class="form-group">
+    <h4>1. Choose a Name</h4>
+    <label>Nom : </label>
+    <input class="form-control" name="name" type="text" ng-model="name" required ng-minlength="2" ng-maxlength="45" />
+    <div ng-messages="formSite.name.$error" ng-if="formSite.$submitted" role="alert">
+      <div ng-message="required" class="text-danger">Please enter a name</div>
 
-  <h4>1. Choose a Name</h4>
-  <label>Nom : </label>
-  <input name="name" type="text" ng-model="name" required ng-minlength="2" ng-maxlength="45" />
-  <div ng-messages="form.name.$error" ng-messages-include="erreurs.html"></div>
+      <div ng-message="minlength" class="text-danger">Name is too short</div>
 
+      <div ng-message="maxlength" class="text-danger">Name is too long</div>
 
-  <br>
-  <div>
-    <h4>2. Choose a Location</h4>
-    <ui-gmap-google-map events="map.events" center='map.center' zoom='map.zoom'>
-      <ui-gmap-marker required ng-repeat="marker in markers" idKey="marker.id" coords="marker.coord" icon="marker.icon" click="click(marker)">
-        <ui-gmap-window show="marker.show" ng-cloak closeClick="!marker.show" templateUrl="'views/markerview.html'" templateParameter="{marker:marker, currentUser : currentUser , scope : scope}">
-
-        </ui-gmap-window>
-      </ui-gmap-marker>
-    </ui-gmap-google-map>
-    
-    <br>
-    <div class="panel panel-primary" ng-repeat="element in markers" >
-      <div class="panel-heading">{{element.city}}</div>
-      <div class="panel-body">
-        {{element.region}}
-      </div>
     </div>
-  </div>
-  <h4>3. Choose Sports</h4>
-  <div>
-    <select required ng-model="sport">
-      <option ng-repeat="element in listeSport" ng-value="element.id">{{ element.name }}<option/>
-      </select>
-      <button type='button' ng-click="addSport()">Add Sport</button>
+    <div ng-if="errors" class="text-danger">{{errors}}</div>
 
-      <div >
-        <div class="row">
-          <div class="col-sm-4 col-xs-5" ng-repeat="element in sports">
-            <div class="thumbnail">
-              <img src="http://placehold.it/250x150&text=img1" alt="">
-              <div class="caption">
-                <h4>{{element.name}}</h4>
-                <button type='button' ng-click="removeSport(element)">remove</button>
+
+    <br>
+    <div>
+      <h4>2. Choose a Location</h4>
+      <ui-gmap-google-map events="map.events" center='map.center' zoom='map.zoom'>
+        <ui-gmap-marker name="marker" ng-repeat="marker in markers" idKey="marker.id" coords="marker.coord" icon="marker.icon" click="click(marker)">
+          <ui-gmap-window show="marker.show" ng-cloak closeClick="!marker.show" templateUrl="'views/markerview.html'" templateParameter="{marker:marker, currentUser : currentUser , scope : scope}">
+
+          </ui-gmap-window>
+        </ui-gmap-marker>
+      </ui-gmap-google-map>
+      <br>
+      <div ng-if="formSite.$submitted && markers.length == 0 " class="text-danger"><strong>Need a location</strong></div>
+      <br>
+      <!-- <div class="panel panel-primary" ng-repeat="element in markers" >
+        <div class="panel-heading">{{element.city}}</div>
+        <div class="panel-body">
+          {{element.region}}
+        </div>
+      </div> -->
+  
+    </div>
+    <h4>3. Choose Sports</h4>
+    <div>
+      <select name="sport" ng-model="sport">
+        <option ng-repeat="element in listeSport" ng-value="element.id">{{ element.name }}<option/>
+      </select>
+
+        <button type='button' ng-click="addSport()">Add Sport</button>
+
+        <div >
+          <div class="row">
+            <div class="col-sm-4 col-xs-5" ng-repeat="element in sports">
+              <div class="thumbnail">
+                <img src="http://placehold.it/250x150&text=img1" alt="">
+                <div class="caption">
+                  <h4>{{element.name}}</h4>
+                  <button type='button' ng-click="removeSport(element)">remove</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <br>
+      <input class="btn btn-primary" type="submit" value="Envoyer" />
     </div>
-    <br>
-    <input type="submit" value="Envoyer" />
   </form>
