@@ -8,13 +8,24 @@
 * # ListactivitiesCtrl
 * Controller of the weekEndApp
 */
-angular.module('weekEndApp')
-.controller('ListsitesGerantCtrl', ['$scope','SitesRest',function ($scope,SitesRest) {
-  var promise = SitesRest.getSites();
-  promise.then(function(data) {
-    console.log(data.data);
-    
-    $scope.liste = data.data;
-  });
+module weekEndApp.Controllers {
 
-}]);
+
+  export class ListsitesGerantCtrl {
+    static $inject = ['$scope','SitesRest'];
+
+    constructor (private $scope,private SitesRest) {
+      this.initController();
+    }
+    initController(){
+
+      var promise = this.SitesRest.getSites();
+      promise.then((data) => {
+
+        this.$scope.liste = data.data;
+      });
+
+    }
+  }
+}
+angular.module('weekEndApp').controller('ListsitesGerantCtrl', weekEndApp.Controllers.ListsitesGerantCtrl);

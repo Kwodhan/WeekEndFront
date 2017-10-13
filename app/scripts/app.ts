@@ -79,20 +79,7 @@ angular.module('weekEndApp', [
 
 }])
 .run(['$rootScope','$http','$location', 'AUTH_EVENTS', 'AuthService','$localStorage',function ($rootScope, $http, $location,AUTH_EVENTS, AuthService,$localStorage) {
-  // keep user logged in after page refresh
 
-// if ($localStorage.currentUser) {
-//   Session.create($localStorage.currentUser.user,$localStorage.currentUser.role,$localStorage.basic);
-// }
-
-  // redirect to login page if not logged in and trying to access a restricted page
-  // $rootScope.$on('$locationChangeStart', function (event, next, current) {
-  //
-  //     var restrictedPage = routesThatDontRequireAuth.indexOf($location.path()) === -1;
-  //     if (restrictedPage && !$localStorage.currentUser) {
-  //         $location.path('/login');
-  //     }
-  // });
   $rootScope.$on('$stateChangeStart', function (event, next) {
     var authorizedRoles = next.data.authorizedRoles;
     if (!AuthService.isAuthorized(authorizedRoles)) {

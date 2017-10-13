@@ -1,38 +1,41 @@
 /// <reference path="../app.ts" />
 'use strict';
 
-/**
-* @ngdoc function
-* @name weekEndApp.controller:LoginCtrl
-* @description
-* # LoginCtrl
-* Controller of the weekEndApp
-*/
-angular.module('weekEndApp')
-.controller('RegisterCtrl',['$scope', '$rootScope','$location', 'AUTH_EVENTS', 'AuthService',function ($scope, $rootScope,$location, AUTH_EVENTS, AuthService) {
-  $scope.credentials = {
-    pseudo: '',
-    password: '',
-    emailAddress:''
-  };
+module weekEndApp.Controllers {
 
 
-  $scope.register = function (credentials) {
+  export class RegisterCtrl {
+    static $inject = ['$scope', '$rootScope','$location', 'AUTH_EVENTS','AuthService'];
 
-    if(!(credentials.pseudo && credentials.password && credentials.emailAddress) ){
-      $scope.errors="A problem occurred";
-      return;
+    constructor (private $scope,private $rootScope,private $location,private AUTH_EVENTS,private AuthService) {
+      this.initController();
     }
-    AuthService.registration(credentials).then(function (user) {
-      if(user){
-        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-        $scope.setCurrentUser(user);
-        $location.path('/');
-      }else{
-          $scope.errors="That Pseudo is already taken";
-      }
-    });
-  };
+    initController(){
+
+      this.$scope.credentials = {
+        pseudo: '',
+        password: '',
+        emailAddress:''
+      };
 
 
-}]);
+      this.$scope.register =  (credentials)=> {
+
+        if(!(credentials.pseudo && credentials.password && credentials.emailAddress) ){
+          this.$scope.errors="A problem occurred";
+          return;
+        }
+        this.AuthService.registration(credentials).then( (user) =>{
+          if(user){
+            this.$rootScope.$broadcast(this.AUTH_EVENTS.loginSuccess);
+            this.$scope.setCurrentUser(user);
+            this.$location.path('/');
+          }else{
+            this.$scope.errors="That Pseudo is already taken";
+          }
+        });
+      };
+    }
+  }
+}
+angular.module('weekEndApp').controller('RegisterCtrl', weekEndApp.Controllers.RegisterCtrl);

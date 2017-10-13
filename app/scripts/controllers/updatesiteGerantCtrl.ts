@@ -8,64 +8,114 @@
 * # UpdatesitegerantCtrl
 * Controller of the weekEndApp
 */
-
-angular.module('weekEndApp')
-.controller('UpdatesiteGerantCtrl',['$scope','$http','LocationsRest','SitesRest','$routeParams','ActivitiesRest','$location',
-function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest,$location) {
-
-  var site = SitesRest.getSite($routeParams.id);
-  site.then(function(data) {
-
-    $scope.name=data.data[0].name;
-    $scope.sports=data.data[0].activities;
-    var location =data.data[0].location;
-
-    $scope.markers= [{
-      coord: {
-        latitude: location.latitude,
-        longitude: location.longitude
-      },
-      city: location.city,
-      region: location.region,
-      icon:pin_url(location.city),
-      id: location.id
-    }];
-  });
-
-  var promise = ActivitiesRest.getActivities();
-  promise.then(function(data) {
-
-    $scope.listeSport = data.data;
-
-  });
+module weekEndApp.Controllers {
 
 
-  // Google map
-  $scope.map = { center: { latitude: 48.117266, longitude: -2.287592000000018 }, zoom: 8,events: {
-    click: function(mapModel, eventName, originalEventArgs)
-    {
-      var e = originalEventArgs[0];
+  export class UpdatesiteGerantCtrl {
+    static $inject = ['$scope','$http','LocationsRest','SitesRest','$routeParams','ActivitiesRest','$location'];
+
+    constructor (private $scope,private $http,private LocationsRest,private SitesRest,private $routeParams,private ActivitiesRest,private $location) {
+      this.initController();
+    }
+
+
+    initController() {
+
+
+      var site = this.SitesRest.getSite(this.$routeParams.id);
+      site.then((data) =>{
+
+        this.$scope.name=data.data[0].name;
+        this.$scope.sports=data.data[0].activities;
+        var location =data.data[0].location;
+
+        this.$scope.markers= [{
+          coord: {
+            latitude: location.latitude,
+            longitude: location.longitude
+          },
+          city: location.city,
+          region: location.region,
+          icon:this.pin_url(location.city),
+          id: location.id
+        }];
+      });
+
+      var promise = this.ActivitiesRest.getActivities();
+      promise.then((data) =>{
+
+        this.$scope.listeSport = data.data;
+
+      });
+
+      // Google map
+      this.$scope.map = { center: { latitude: 48.117266, longitude: -2.287592000000018 }, zoom: 8,events: {
+        click: (mapModel, eventName, originalEventArgs)=>
+        {
+          var e = originalEventArgs[0];
 
 
 
-      onPositionUpdate(e.latLng.lat(),e.latLng.lng());
-    },
+          this.onPositionUpdate(e.latLng.lat(),e.latLng.lng());
+        },
 
 
-  } };
-  $scope.click =  function(marker) {
+      } };
+      this.$scope.click =  (marker)=> {
+
+      }
+
+      this.$scope.addSport= ()=>{
+        if(  this.$scope.sport &&  (this.$scope.sports.indexOf(this.$scope.listeSport[this.$scope.sport-1]) == -1)){
+          this.$scope.sports.push(this.$scope.listeSport[this.$scope.sport-1]);
+        }
+      }
+
+      this.$scope.removeSport= (element)=>{
+        var index = this.$scope.sports.indexOf(element);
+        if (index > -1) {
+          this.$scope.sports.splice(index, 1);
+        }
+
+      }
+
+
+      this.$scope.submit = ()=>{
+
+        if(!(this.$scope.markers.length != 0 && this.$scope.name)){
+          return;
+        }
+        this.SitesRest.updateSite({
+          id:this.$routeParams.id,
+          name : this.$scope.name,
+          activities:this.$scope.sports,
+          location:this.$scope.markers[0].id
+        }
+
+      ).then((result) =>{
+        this.$location.path('/gerant/sites');
+      });
+
+
+
+
+
+    }
 
   }
 
-  function ajouterLocation(marker) {
-    var promise = LocationsRest.postLocation(marker);
-    promise.then(function(data) {
 
-      if(containt(data,$scope.markers)){
+
+
+  ajouterLocation(marker) {
+    var promise = this.LocationsRest.postLocation(marker);
+    promise.then((data)=> {
+
+      if(this.containt(data,this.$scope.markers)){
         return;
       }
 
-      $scope.markers = [{
+      this.$scope.markers = [{
         coord: {
           latitude: data.latitude,
           longitude: data.longitude
@@ -81,19 +131,17 @@ function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest,$loc
 
   }
 
-  $scope.click =  function(marker) {
 
-  }
-  function onPositionUpdate(latitude,longitude) {
+  onPositionUpdate(latitude,longitude) {
 
     var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key="+"AIzaSyAau09m1LQhDtd3YJvZ9mJYH91RRN4JOCU";
-    $http.get(url)
-    .then(function(result) {
+    this.$http.get(url)
+    .then((result) =>{
 
-      var address = searchCityRegion(result.data.results);
+      var address = this.searchCityRegion(result.data.results);
       if(address.city && address.region){
 
-        ajouterLocation({city:address.city , region:address.region,  latitude: latitude, longitude: longitude});
+        this.ajouterLocation({city:address.city , region:address.region,  latitude: latitude, longitude: longitude});
       }
 
     });
@@ -104,7 +152,7 @@ function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest,$loc
 
 
 
-  function pin_url(pin_label) {
+  pin_url(pin_label) {
     var pin_color = '37455c';
     var pin_text_color = 'ffffff';
     return 'http://chart.apis.google.com/chart?' +
@@ -113,7 +161,7 @@ function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest,$loc
     pin_text_color;
   }
 
-  function searchCityRegion(data) {
+  searchCityRegion(data) {
 
     for (var type of data) {
       if(type.types[0]==="locality"){
@@ -125,7 +173,7 @@ function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest,$loc
     return {city :'', region : ''}
   }
 
-  function containt(nameKey, myArray){
+  containt(nameKey, myArray){
     for (var i=0; i < myArray.length; i++) {
       if (myArray[i].id === nameKey.id) {
         return true;
@@ -133,7 +181,7 @@ function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest,$loc
     }
     return false;
   }
-  function remove(nameKey, myArray){
+  remove(nameKey, myArray){
     for (var i=0; i < myArray.length; i++) {
       if (myArray[i].id === nameKey.id) {
         myArray.splice(i, 1);
@@ -143,41 +191,7 @@ function ($scope, $http,LocationsRest,SitesRest,$routeParams,ActivitiesRest,$loc
     return myArray;
   }
 
-  $scope.addSport= function(){
-    if($scope.sport &&  ($scope.sports.indexOf($scope.listeSport[$scope.sport-1]) == -1)){
-      $scope.sports.push($scope.listeSport[$scope.sport-1]);
-    }
-  }
-
-  $scope.removeSport= function(element){
-    var index = $scope.sports.indexOf(element);
-    if (index > -1) {
-      $scope.sports.splice(index, 1);
-    }
-
-  }
-
-
-  $scope.submit = function(){
-
-    if(!($scope.markers.length != 0 && $scope.name)){
-      return;
-    }
-    SitesRest.updateSite({
-      id:$routeParams.id,
-      name : $scope.name,
-      activities:$scope.sports,
-      location:$scope.markers[0].id
-    }
-
-  ).then(function(result) {
-      $location.path('/gerant/sites');
-  });
-
-
-
-
 
 }
-
-}]);
+}
+angular.module('weekEndApp').controller('UpdatesiteGerantCtrl', weekEndApp.Controllers.UpdatesiteGerantCtrl);

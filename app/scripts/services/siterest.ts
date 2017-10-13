@@ -1,81 +1,76 @@
 /// <reference path="../app.ts" />
 'use strict';
 
-/**
-* @ngdoc service
-* @name weekEndApp.siteRest
-* @description
-* # siteRest
-* Service in the weekEndApp.
-*/
-angular.module('weekEndApp')
-.service('SitesRest',['$resource', 'urlWeekTest','$localStorage','UpdateSite',function ($resource,urlWeekTest,$localStorage,UpdateSite) {
 
-  var urlBase = '/sites/';
+  module weekEndApp.Services {
 
-  this.getSite = function (id) {
-    var Site = $resource(urlWeekTest+urlBase+':id/', {id:'@id'}, {
-      get: {
-        method: 'GET',
-        headers: { 'Authorization': $localStorage.currentUser.basic }
+
+    export class SitesRest {
+      static $inject = ['$resource', 'urlWeekTest','$localStorage','UpdateSite'];
+        urlBase :string = '/sites/';
+      constructor (private $resource,private urlWeekTest,private $localStorage,private  UpdateSite) {
+
       }
-    });
-    var site = Site.get({id:id}).$promise.then(function(data) {
 
-      return (data.toJSON());
-    });
-    return site;
-  };
+      getSite(id) {
+        var Site = this.$resource(this.urlWeekTest+this.urlBase+':id/', {id:'@id'}, {
+          get: {
+            method: 'GET',
+            headers: { 'Authorization': (this.$localStorage.basic? this.$localStorage.basic : '') }
+          }
+        });
+        var site = Site.get({id:id}).$promise.then(function(data) {
 
-  this.getSites = function () {
-    var Site = $resource(urlWeekTest+urlBase,{}, {
-      get: {
-        method: 'GET',
-        headers: { 'Authorization': $localStorage.currentUser.basic }
+          return (data.toJSON());
+        });
+        return site;
       }
-    });
-    var sites = Site.get().$promise.then(function(data) {
-      return (data.toJSON());
-    });
-    return sites;
-  };
 
-  this.postSite = function (site) {
-    var Site = $resource(urlWeekTest+urlBase,{},
-      {
-        save: {
-          method: 'POST',
-          headers: { 'Authorization': $localStorage.currentUser.basic }
+      getSites() {
+        var Site = this.$resource(this.urlWeekTest+this.urlBase,{}, {
+          get: {
+            method: 'GET',
+            headers: { 'Authorization': (this.$localStorage.basic? this.$localStorage.basic : '') }
+          }
+        });
+        var sites = Site.get().$promise.then(function(data) {
+          return (data.toJSON());
+        });
+        return sites;
+      }
+
+      postSite(site) {
+        var Site = this.$resource(this.urlWeekTest+this.urlBase,{},
+          {
+            save: {
+              method: 'POST',
+              headers: { 'Authorization': (this.$localStorage.basic? this.$localStorage.basic : '') }
+            }
+          });
+          var sites = Site.save({
+            name:site.name,
+            location:{id : site.locationid},
+            activities:site.activities
+
+
+          }).$promise.then(function(data) {
+            return (data.toJSON());
+          });
+          return sites;
         }
-      });
-      var sites = Site.save({
-        name:site.name,
-        location:{id : site.locationid},
-        activities:site.activities
+
+        updateSite(site) {
+          var site = this.UpdateSite.update(site.id,site.name,{id : site.location},  site.activities).$promise.then(function(data) {
 
 
-      }).$promise.then(function(data) {
-        return (data.toJSON());
-      });
-      return sites;
-    };
-
-    this.updateSite= function (site) {
-      var site = UpdateSite.update({
-        id:site.id,
-        name:site.name,
-        location:{id : site.location},
-        activities:site.activities
+            return (data.toJSON());
+          });
+          return site;
+        }
 
 
-      }).$promise.then(function(data) {
+    }
+  }
 
-
-        return (data.toJSON());
-      });
-      return site;
-    };
-
-
-
-  }]);
+  angular.module('weekEndApp')
+  .service('SitesRest', weekEndApp.Services.SitesRest);

@@ -1,66 +1,44 @@
-/// <reference path="../app.ts" />
-'use strict';
 
-/**
-* @ngdoc service
-* @name weekEndApp.UserUpdate
-* @description
-* # UserUpdate
-* Factory in the weekEndApp.
-*/
-angular.module('weekEndApp')
-.factory('UpdateUserActivity', ['$resource', 'urlWeekTest', '$localStorage',function ($resource,urlWeekTest, $localStorage) {
-
-
-  return $resource(urlWeekTest+'/users/:idu/activities/:ida',{idu: '@idu',ida:'@ida'}, {
-    update: {method:'PUT', params: {idu: '@idu',ida:'@ida'}, headers: { 'Authorization':($localStorage.currentUser? $localStorage.currentUser.basic : '')  }}}
-  );
-
-
-}]);
-
-angular.module('weekEndApp')
-.factory('UpdateUserLocation', ['$resource', 'urlWeekTest', '$localStorage',function ($resource,urlWeekTest, $localStorage) {
-
-
-  return $resource(urlWeekTest+'/users/:idu/homes/:idl',{idu: '@idu',idl:'@idl'}, {
-    update: {method:'PUT', params: {idu: '@idu',idl:'@idl'}, headers: { 'Authorization': ($localStorage.currentUser? $localStorage.currentUser.basic : '')  }}}
-  );
-
-
-}]);
-
-/*
 /// <reference path="../app.ts" />
 'use strict';
 
 
-module weekEndApp {
+module weekEndApp.Factory {
 
 
   export class UpdateUser {
-    static $inject = ['$resource', 'urlWeekTest','$localStorage'];
+  
     constructor (private $resource,private urlWeekTest,private $localStorage) {
 
     }
 
-    updateActivity(){
+    updateActivity(idu: number,ida:number){
 
-      return this.$resource(this.urlWeekTest+'/sites',{id: '@id',name:'@name',location:'@location',activities:'@activities'}, {
-        update: {method:'PUT', params: {id: '@id',name:'@name',location:'@location',activities:'@activities'}, headers: { 'Authorization': (this.$localStorage.currentUser? this.$localStorage.currentUser.basic : '')  }}
+      var User  = this.$resource(this.urlWeekTest+'/users/:idu/activities/:ida',{idu: '@idu',ida:'@ida'}, {
+        update: {method:'PUT', params: {idu: '@idu',ida:'@ida'}, headers: { 'Authorization': (this.$localStorage.currentUser? this.$localStorage.currentUser.basic : '')  }}}
+      );
+      var user = User.update({
+        idu :idu,
+        ida :ida
       });
+      return user;
 
     }
 
-    UpdateLocation(){
-      return this.$resource(this.urlWeekTest+'/users/:idu/homes/:idl',{idu: '@idu',idl:'@idl'}, {
+    updateLocation(idu: number,idl:number){
+      var User  = this.$resource(this.urlWeekTest+'/users/:idu/homes/:idl',{idu: '@idu',idl:'@idl'}, {
         update: {method:'PUT', params: {idu: '@idu',idl:'@idl'}, headers: { 'Authorization': (this.$localStorage.currentUser? this.$localStorage.currentUser.basic : '')  }}}
       );
+      var user = User.update({
+        idu :idu,
+        idl :idl
+      });
+      return user;
     }
 
   }
 }
 
+
 angular.module('weekEndApp')
-.factory('UpdateUser', [weekEndApp]);
-*/
+.factory('UpdateUser',["$resource",'urlWeekTest' ,"$localStorage", ($resource,urlWeekTest ,$localStorage) => new weekEndApp.Factory.UpdateUser($resource, urlWeekTest,$localStorage)]);

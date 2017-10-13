@@ -8,43 +8,50 @@
 * # location
 * Service in the weekEndApp.
 */
-angular.module('weekEndApp')
-.service('LocationsRest',['$resource', 'urlWeekTest','$localStorage',function ($resource,urlWeekTest,$localStorage) {
+module weekEndApp.Services {
 
-  var urlBase = '/locations/';
 
-  this.getLocation = function (id) {
-    var Location = $resource(urlWeekTest+urlBase+':id/', {id:'@id'}, {
+  export class LocationsRest {
+    static $inject = ['$resource', 'urlWeekTest','$localStorage','UpdateSite'];
+      urlBase :string = '/locations/';
+    constructor (private $resource,private urlWeekTest,private $localStorage,private  UpdateSite) {
+
+    }
+
+
+getLocation(id) {
+    var Location = this.$resource(this.urlWeekTest+this.urlBase+':id/', {id:'@id'}, {
       get: {
         method: 'GET',
-        headers: { 'Authorization': ($localStorage.currentUser? $localStorage.currentUser.basic : '') }
+        headers: { 'Authorization': (this.$localStorage.basic? this.$localStorage.basic : '') }
       }
     });
     var location = Location.get({id:id}).$promise.then(function(data) {
       return (data.toJSON());
     });
     return location.data[0];
-  };
+  }
 
-  this.getLocations = function () {
-    var Location = $resource(urlWeekTest+urlBase,{}, {
+  getLocations() {
+    var Location = this.$resource(this.urlWeekTest+this.urlBase,{}, {
       get: {
         method: 'GET',
-        headers: { 'Authorization': ($localStorage.currentUser? $localStorage.currentUser.basic : '') }
+        headers: { 'Authorization': (this.$localStorage.basic? this.$localStorage.basic : '') }
       }
     });
     var locations = Location.get().$promise.then(function(data) {
       return (data.toJSON());
     });
-    return locations;
-  };
 
-  this.postLocation = function (marker) {
-    var Location = $resource(urlWeekTest+urlBase,{},
+    return locations;
+  }
+
+  postLocation(marker) {
+    var Location = this.$resource(this.urlWeekTest+this.urlBase,{},
       {
         save: {
           method: 'POST',
-          headers: { 'Authorization': ($localStorage.currentUser? $localStorage.currentUser.basic : '') }
+          headers: { 'Authorization': (this.$localStorage.basic? this.$localStorage.basic : '') }
         }
       });
       var locations = Location.save({
@@ -57,8 +64,12 @@ angular.module('weekEndApp')
         return (data.toJSON());
       });
       return locations;
-    };
+    }
 
 
 
-  }]);
+  }
+}
+
+angular.module('weekEndApp')
+.service('LocationsRest', weekEndApp.Services.LocationsRest);

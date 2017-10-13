@@ -8,37 +8,50 @@
 * # ListactivitiesCtrl
 * Controller of the weekEndApp
 */
-angular.module('weekEndApp')
-.controller('ListActivitiesCtrl', ['$scope','ActivitiesRest','UserRest',function ($scope, ActivitiesRest,UserRest) {
+module weekEndApp.Controllers {
 
-  var promise = ActivitiesRest.getActivities();
-  promise.then(function(data) {
-  
-    $scope.liste = data.data;
-  });
 
-  $scope.isActivities = function(id) {
-    for (var activity of $scope.currentUser.activities) {
-      if(activity.id === id){
-        return true;
-      }
+  export class ListActivitiesCtrl {
+    static $inject = ['$scope','ActivitiesRest','UserRest'];
+
+    constructor (private $scope,private ActivitiesRest,private UserRest) {
+      this.initController();
     }
-    return false;
+
+    initController() {
+      var promise = this.ActivitiesRest.getActivities();
+      promise.then((data) =>{
+
+        this.$scope.liste = data.data;
+      });
+
+      this.$scope.isActivities = (id) => {
+        for (var activity of this.$scope.currentUser.activities) {
+          if(activity.id === id){
+            return true;
+          }
+        }
+        return false;
+      }
+
+      this.$scope.ajouter = (id) =>{
+        var promise = this.UserRest.addActivity(id);
+        promise.then((data)=> {
+          this.$scope.setCurrentUser(data);
+        });
+      }
+
+      this.$scope.enlever = (id) => {
+        var promise = this.UserRest.removeActivity(id);
+        promise.then((data)=> {
+          this.$scope.setCurrentUser(data);
+
+        });
+      }
+
+    }
+
   }
+}
 
-  $scope.ajouter = function(id) {
-    var promise = UserRest.addActivity(id);
-    promise.then(function(data) {
-      $scope.setCurrentUser(data);
-    });
-  }
-
-  $scope.enlever = function(id) {
-    var promise = UserRest.removeActivity(id);
-    promise.then(function(data) {
-      $scope.setCurrentUser(data);
-
-    });
-  }
-
-}]);
+angular.module('weekEndApp').controller('ListActivitiesCtrl', weekEndApp.Controllers.ListActivitiesCtrl);

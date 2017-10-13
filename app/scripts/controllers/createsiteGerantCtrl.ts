@@ -8,155 +8,172 @@
 * # ListsiteCtrl
 * Controller of the weekEndApp
 */
-angular.module('weekEndApp')
-.controller('CreatesiteGerantCtrl',  ['$scope','LocationsRest','ActivitiesRest','SitesRest','UserRest','$http',  '$location',
-function ($scope, LocationsRest,ActivitiesRest,SitesRest,UserRest,$http,$location) {
-  $scope.markers = [];
-  $scope.sports =[];
-  var promise = ActivitiesRest.getActivities();
-  promise.then(function(data) {
 
-    $scope.listeSport = data.data;
-
-  });
+module weekEndApp.Controllers {
 
 
-  // Google map
-  $scope.map = { center: { latitude: 48.117266, longitude: -2.287592000000018 }, zoom: 8,events: {
-    click: function(mapModel, eventName, originalEventArgs)
-    {
-      var e = originalEventArgs[0];
-      onPositionUpdate(e.latLng.lat(),e.latLng.lng());
-    },
+  export class CreatesiteGerantCtrl {
+    static $inject = ['$scope','LocationsRest','ActivitiesRest','SitesRest','UserRest','$http',  '$location'];
+
+    constructor (private $scope,private LocationsRest,private ActivitiesRest,private SitesRest,private UserRest,private $http,private $location) {
+      this.initController();
+    }
 
 
-  } };
+    initController() {
+      this.$scope.markers = [];
+      this.$scope.sports =[];
+      var promise = this.ActivitiesRest.getActivities();
+      promise.then((data) => {
+
+        this.$scope.listeSport = data.data;
 
 
-  function ajouterLocation(marker) {
-    var promise = LocationsRest.postLocation(marker);
-    promise.then(function(data) {
+      });
+      //
+      this.$scope.map = { center: { latitude: 48.117266, longitude: -2.287592000000018 }, zoom: 8,events: {
+        click: ((mapModel, eventName, originalEventArgs) => {
 
-      if(containt(data,$scope.markers)){
-        return;
+          var e = originalEventArgs[0];
+          this.onPositionUpdate(e.latLng.lat(),e.latLng.lng());
+        }),
+
+
+      } };
+
+      this.$scope.click =  ((marker) => {
+
+
+
+      });
+
+      this.$scope.addSport= (() => {
+        if(  this.$scope.sport && (  this.$scope.sports.indexOf(  this.$scope.listeSport[  this.$scope.sport-1]) == -1)){
+          this.$scope.sports.push(  this.$scope.listeSport[  this.$scope.sport-1]);
+        }
+      });
+
+      this.$scope.removeSport= ((element) => {
+        var index =   this.$scope.sports.indexOf(element);
+        if (index > -1) {
+          this.$scope.sports.splice(index, 1);
+        }
+
+      });
+
+
+      this.$scope.submit = (() => {
+
+        if(!(  this.$scope.markers.length != 0 &&   this.$scope.name)){
+          return;
+        }
+        this.SitesRest.postSite({
+          name :   this.$scope.name,
+          activities:  this.$scope.sports,
+          locationid:  this.$scope.markers[0].id}
+        ).then((result)=> {
+          this.$location.path('/gerant/sites');
+        });
+
+      });
+    }
+
+
+    // Google map
+
+
+
+    ajouterLocation(marker) {
+      var promise = this.LocationsRest.postLocation(marker);
+      promise.then((data) => {
+
+        if(this.containt(data,this.$scope.markers)){
+          return;
+        }
+
+        this.$scope.markers = [{
+          coord: {
+            latitude: data.latitude,
+            longitude: data.longitude
+          },
+          city: data.city,
+          region: data.region,
+          show:true,
+          id: data.id
+        }];
+
+
+
+      });
+
+    }
+
+
+    onPositionUpdate(latitude,longitude) {
+
+      var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key="+"AIzaSyAau09m1LQhDtd3YJvZ9mJYH91RRN4JOCU";
+      this.$http.get(url)
+      .then((result) =>{
+
+        var address = this.searchCityRegion(result.data.results);
+
+        if(address.city && address.region){
+
+          this.ajouterLocation({city:address.city , region:address.region,  latitude: latitude, longitude: longitude});
+        }
+
+      });
+    }
+
+
+
+
+
+
+    pin_url(pin_label) {
+      var pin_color = '37455c';
+      var pin_text_color = 'ffffff';
+      return 'http://chart.apis.google.com/chart?' +
+      'chst=d_map_pin_letter_withshadow&chld=' +
+      pin_label + '|' + pin_color + '|' +
+      pin_text_color;
+    }
+
+    searchCityRegion(data) {
+
+      for (var type of data) {
+        if(type.types[0]==="locality"){
+          return {city : type.address_components[0].long_name, region : type.address_components[1].long_name}
+        }
+
       }
 
-      $scope.markers = [{
-        coord: {
-          latitude: data.latitude,
-          longitude: data.longitude
-        },
-        city: data.city,
-        region: data.region,
-        show:true,
-        id: data.id
-      }];
-
-
-
-    });
-
-  }
-
-  $scope.click =  function(marker) {
-    if(!$scope.currentUser ){
-      remove(marker,$scope.markers);
-    }else if ($scope.currentUser && !$scope.isLocations(marker.id)){
-      remove(marker,$scope.markers);
+      return {city :'', region : ''}
     }
-  }
-  function onPositionUpdate(latitude,longitude) {
-
-    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key="+"AIzaSyAau09m1LQhDtd3YJvZ9mJYH91RRN4JOCU";
-    $http.get(url)
-    .then(function(result) {
-
-      var address = searchCityRegion(result.data.results);
-
-      if(address.city && address.region){
-
-        ajouterLocation({city:address.city , region:address.region,  latitude: latitude, longitude: longitude});
+    // End Google map
+    containt(nameKey, myArray){
+      for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === nameKey.id) {
+          return true;
+        }
+      }
+      return false;
+    }
+    remove(nameKey, myArray){
+      for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].id === nameKey.id) {
+          myArray.splice(i, 1);
+        }
       }
 
-    });
-  }
-
-
-
-
-
-
-  function pin_url(pin_label) {
-    var pin_color = '37455c';
-    var pin_text_color = 'ffffff';
-    return 'http://chart.apis.google.com/chart?' +
-    'chst=d_map_pin_letter_withshadow&chld=' +
-    pin_label + '|' + pin_color + '|' +
-    pin_text_color;
-  }
-
-  function searchCityRegion(data) {
-
-    for (var type of data) {
-      if(type.types[0]==="locality"){
-        return {city : type.address_components[0].long_name, region : type.address_components[1].long_name}
-      }
-
+      return myArray;
     }
 
-    return {city :'', region : ''}
-  }
-  // End Google map
-  function containt(nameKey, myArray){
-    for (var i=0; i < myArray.length; i++) {
-      if (myArray[i].id === nameKey.id) {
-        return true;
-      }
-    }
-    return false;
-  }
-  function remove(nameKey, myArray){
-    for (var i=0; i < myArray.length; i++) {
-      if (myArray[i].id === nameKey.id) {
-        myArray.splice(i, 1);
-      }
-    }
-
-    return myArray;
-  }
-
-  $scope.addSport= function(){
-    if($scope.sport && ($scope.sports.indexOf($scope.listeSport[$scope.sport-1]) == -1)){
-      $scope.sports.push($scope.listeSport[$scope.sport-1]);
-    }
-  }
-
-  $scope.removeSport= function(element){
-    var index = $scope.sports.indexOf(element);
-    if (index > -1) {
-      $scope.sports.splice(index, 1);
-    }
-
-  }
 
 
-  $scope.submit = function(){
-    console.log("merde");
-    if(!($scope.markers.length != 0 && $scope.name)){
-      return;
-    }
-    SitesRest.postSite({
-      name : $scope.name,
-      activities:$scope.sports,
-      locationid:$scope.markers[0].id}
-    ).then(function(result) {
-        $location.path('/gerant/sites');
-    });
-    
 
 
   }
+}
 
-
-
-}]);
+angular.module('weekEndApp').controller('CreatesiteGerantCtrl', weekEndApp.Controllers.CreatesiteGerantCtrl);

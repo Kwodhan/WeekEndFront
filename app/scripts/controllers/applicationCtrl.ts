@@ -2,36 +2,42 @@
 
 'use strict';
 
-/**
-* @ngdoc function
-* @name weekEndApp.controller:applicationCtrl
-* @description
-* # ApplicationCtrl
-* Controller of the weekEndApp
-*/
-angular.module('weekEndApp')
-.controller('ApplicationCtrl', function ($scope,
-  USER_ROLES,
-  AuthService,$localStorage) {
-    initController();
+module weekEndApp.Controllers {
 
-    function initController() {
 
-      if($localStorage.currentUser){
-        $scope.currentUser = $localStorage.currentUser.user;
-        $scope.userRoles = USER_ROLES;
-        $scope.isAuthorized = AuthService.isAuthorized;
-      }
-      else{
-        $scope.currentUser = null;
-        $scope.userRoles = USER_ROLES;
-        $scope.isAuthorized = AuthService.isAuthorized;
-      }
+  export class ApplicationCtrl {
+    static $inject = ['$scope', 'USER_ROLES','AuthService','$localStorage'];
+
+    constructor (private $scope,private USER_ROLES,private AuthService,private $localStorage) {
+      this.initController();
     }
 
 
-    $scope.setCurrentUser = function (user) {
-      $localStorage.currentUser.user = user;
-      $scope.currentUser = user;
-    };
-  })
+
+    initController() {
+
+      if(this.$localStorage.currentUser){
+        this.$scope.currentUser = this.$localStorage.currentUser;
+        this.$scope.userRoles =this.USER_ROLES;
+        this.$scope.isAuthorized = this.AuthService.isAuthorized;
+      }
+      else{
+        this.$scope.currentUser = null;
+        this.$scope.userRoles = this.USER_ROLES;
+        this.$scope.isAuthorized = this.AuthService.isAuthorized;
+      }
+
+      this.$scope.setCurrentUser = (user) => {
+        this.$localStorage.currentUser = user;
+        this.$scope.currentUser = user;
+  }
+    }
+
+
+
+
+
+  }
+}
+
+angular.module('weekEndApp').controller('ApplicationCtrl', weekEndApp.Controllers.ApplicationCtrl);

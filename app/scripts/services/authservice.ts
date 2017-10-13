@@ -1,73 +1,78 @@
 /// <reference path="../app.ts" />
 'use strict';
 
-/**
-* @ngdoc service
-* @name weekEndApp.AuthService
-* @description
-* # AuthService
-* Factory in the weekEndApp.
-*/
-angular.module('weekEndApp')
-.factory('AuthService', function ($http,urlWeekTest,$localStorage) {
-
-  var urlBase = '/auth/';
+module weekEndApp.Factory {
 
 
-  this.registration = function (credentials) {
+  export class AuthService {
+  
+    urlBase :string = '/auth/';
+    constructor (private $resource,private urlWeekTest,private $localStorage) {
 
-    var basic ="Basic "+ btoa(credentials.pseudo+':'+credentials.password);
-    return $http
-    .post(urlWeekTest+urlBase+'registration', credentials)
-    .then(function (res) {
+    }
 
 
-        $localStorage.currentUser = {user : res.data ,role:
-          res.data.roles[0],basic:basic}
 
-        return res.data;
-      },function (res) {
-
-          return null;
-
-      });
-    };
-
-    this.login = function (credentials) {
-
+    registration(credentials) {
       var basic ="Basic "+ btoa(credentials.pseudo+':'+credentials.password);
-      return $http
-      .post(urlWeekTest+urlBase+'login', credentials)
-      .then(function (res) {
+      this.$localStorage.basic= basic;
+      var User = this.$resource(this.urlWeekTest+this.urlBase+'registration',{},
+      {
+        save: {
+          method: 'POST',
 
-
-          $localStorage.currentUser = {user : res.data ,role:
-            res.data.roles[0],basic:basic}
-          return res.data;
-        },function (res) {
-          // 401 unauthorized
-          return null;
-
-        })
-      };
-
-      this.logout = function () {
-
-        delete $localStorage.currentUser;
-
-      };
-
-      this.isAuthenticated = function () {
-        return !!$localStorage.currentUser.user;
-      };
-
-      this.isAuthorized = function (authorizedRoles) {
-        if (!angular.isArray(authorizedRoles)) {
-          authorizedRoles = [authorizedRoles];
         }
-        return (this.isAuthenticated() &&
-        authorizedRoles.indexOf($localStorage.currentUser.role) !== -1);
-      };
+      });
+      var user = User.save(credentials).$promise.then(function(data) {
+        return (data.toJSON());
+      },function(data) {
+        null;
+      });
+      return user;
 
-      return this;
-    })
+
+    }
+
+    login(credentials) {
+      var basic ="Basic "+ btoa(credentials.pseudo+':'+credentials.password);
+      this.$localStorage.basic= basic;
+      var User = this.$resource(this.urlWeekTest+this.urlBase+'login',{},
+      {
+        save: {
+          method: 'POST',
+
+        }
+      });
+      var user = User.save(credentials).$promise.then(function(data) {
+        return (data.toJSON());
+      },function(data) {
+        null;
+      });
+      return user;
+
+    }
+
+    logout() {
+
+      delete this.$localStorage.currentUser;
+
+    }
+
+    isAuthenticated() {
+      return !!this.$localStorage.currentUser;
+    }
+
+    isAuthorized(authorizedRoles) {
+      if (!angular.isArray(authorizedRoles)) {
+        authorizedRoles = [authorizedRoles];
+      }
+      return (this.isAuthenticated() &&
+      authorizedRoles.indexOf(this.$localStorage.currentUser.role[0]) !== -1);
+    }
+
+  }
+}
+
+
+angular.module('weekEndApp')
+.factory('AuthService',["$resource",'urlWeekTest' ,"$localStorage", ($resource,urlWeekTest ,$localStorage) => new weekEndApp.Factory.AuthService($resource, urlWeekTest,$localStorage)]);
