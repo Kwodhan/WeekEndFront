@@ -7,12 +7,12 @@ module weekEndApp.Factory {
 
 
   export class UpdateSite {
-  
+
     constructor (private $resource,private urlWeekTest,private $localStorage) {
 
     }
 
-    update(id: number,name : string,location,activities){
+    update(id: number,name : string,siteWeb:string,location,activities){
 
       var Site = this.$resource(this.urlWeekTest+'/sites',{id: '@id',name:'@name',location:'@location',activities:'@activities'}, {
         update: {method:'PUT', params: {id: '@id',name:'@name',location:'@location',activities:'@activities'}, headers: { 'Authorization': (this.$localStorage.currentUser? this.$localStorage.currentUser.basic : '')  }}}
@@ -20,6 +20,7 @@ module weekEndApp.Factory {
       var site = Site.update({
         id :id,
         name:name,
+        siteWeb:siteWeb,
         location:location,
         activities:activities
 

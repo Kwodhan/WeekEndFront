@@ -69,6 +69,7 @@ module weekEndApp.Controllers {
         }
         this.SitesRest.postSite({
           name :   this.$scope.name,
+          siteWeb :   this.$scope.web,
           activities:  this.$scope.sports,
           locationid:  this.$scope.markers[0].id}
         ).then((result)=> {

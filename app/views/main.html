@@ -1,42 +1,48 @@
 <div class="jumbotron">
 <div class="container text-center">
 
-
-      <h2>Welcome to WeekEndNotif</h2>
+<!-- Guest -->
+      <h2>Bienvenue sur WeekEndNotif</h2>
       <div ng-if="!currentUser">
         <p class="lead" >
           <img src="images/pluie.jpg"><br>
 
-          Let us prepare your Week-end.
+          Laissez nous preparer votre Week-end.
         </p>
+          <p><a ng-if="!currentUser" class="btn btn-lg btn-success" ng-href="#!/register">Let's Begin! <span class="glyphicon glyphicon-ok"></span></a></p>
       </div>
-      <div ng-if="currentUser">
+      <!-- User -->
+      <div ng-if="currentUser && isAuthorized(userRoles.user)">
 
 
         <br>
-        <h4><strong>It's simple, You :</strong></h4>
+        <h4><strong>C'est très simple, Vous :</strong></h4>
         <ul class="list-unstyled" >
-          <li>Choose your homes</li>
-          <li>Choose your favorites Activities (Sport, leisure)</li>
-          <li>It's Done!</li>
+          <li>Choisissez vos lieux de prédilection</li>
+          <li>Choisissez vos activitées favories (Sport, Loisir)</li>
+          <li>C'est fait!</li>
         </ul>
 
         <br>
-        <h4><strong>We :</strong></h4>
-        <h5>send a notification the Thuesday with :</h5>
+        <h4><strong>Nous :</strong></h4>
+        <h5>Envoyons une notification le Jeudi avec :</h5>
         <ul class="list-unstyled">
-          <li>The location of the site according to your preferences.</li>
-          <li>The Saturday and Sunday's Meteo.</li>
+          <li>Une liste de sites en fonction de vos préférences.</li>
+          <li>La méteo du samedi et du dimanche.</li>
         </ul>
 
-
+        <p><a class="btn btn-lg btn-success" ng-href="#!/locations">Choisissez vos lieux<span class="glyphicon glyphicon-home"></span></a>
+          <a class="btn btn-lg btn-info" ng-href="#!/activities">Choisissez vos activitées<span class="glyphicon glyphicon-glass"></span></a>
+        </p>
 
       </div>
+          <!-- Gerant -->
 
-      <p><a ng-if="!currentUser" class="btn btn-lg btn-success" ng-href="#!/register">Let's Begin! <span class="glyphicon glyphicon-ok"></span></a></p>
-      <p><a ng-if="currentUser" class="btn btn-lg btn-success" ng-href="#!/locations">Choose your Home <span class="glyphicon glyphicon-home"></span></a>
-        <a ng-if="currentUser" class="btn btn-lg btn-info" ng-href="#!/activities">Choose your Activities <span class="glyphicon glyphicon-glass"></span></a>
-      </p>
-      <p></p>
+          <div ng-if="currentUser && isAuthorized(userRoles.gerant)">
+  <p><a class="btn btn-lg btn-success" ng-href="#!/gerant/addsite">Ajouter un site <span class="glyphicon glyphicon-ok"></span></a></p>
+</div>
+
+
+
   </div>
 </div>

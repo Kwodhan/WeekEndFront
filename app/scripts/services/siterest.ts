@@ -49,6 +49,7 @@
           });
           var sites = Site.save({
             name:site.name,
+            siteWeb:site.siteWeb,
             location:{id : site.locationid},
             activities:site.activities
 
@@ -60,7 +61,7 @@
         }
 
         updateSite(site) {
-          var site = this.UpdateSite.update(site.id,site.name,{id : site.location},  site.activities).$promise.then(function(data) {
+          var site = this.UpdateSite.update(site.id,site.name,site.siteWeb,{id : site.location},  site.activities).$promise.then(function(data) {
 
 
             return (data.toJSON());

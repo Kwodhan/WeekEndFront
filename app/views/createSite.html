@@ -1,6 +1,6 @@
 <form name="formSite" ng-submit="formSite.$valid && submit()" novalidate>
   <div  class="form-group">
-    <h4>1. Choose a Name</h4>
+    <h4>1. Mettre le nom</h4>
     <label>Nom : </label>
     <input class="form-control" name="name" type="text" ng-model="name" required ng-minlength="2" ng-maxlength="45" />
     <div ng-messages="formSite.name.$error" ng-if="formSite.$submitted" role="alert">
@@ -12,11 +12,12 @@
 
     </div>
     <div ng-if="errors" class="text-danger">{{errors}}</div>
-
-
+    <h4>2. Site Web (optionnel)</h4>
+    <label>Site Web: </label>
+  <input class="form-control" name="web" type="url" ng-model="web" ng-maxlength="60" />
     <br>
     <div>
-      <h4>2. Choose a Location</h4>
+      <h4>3. Mettre l'emplacement du site</h4>
       <ui-gmap-google-map events="map.events" center='map.center' zoom='map.zoom'>
         <ui-gmap-marker name="marker" ng-repeat="marker in markers" idKey="marker.id" coords="marker.coord" icon="marker.icon" click="click(marker)">
           <ui-gmap-window show="marker.show" ng-cloak closeClick="!marker.show" templateUrl="'views/markerview.html'" templateParameter="{marker:marker, currentUser : currentUser , scope : scope}">
@@ -33,15 +34,15 @@
           {{element.region}}
         </div>
       </div> -->
-  
+
     </div>
-    <h4>3. Choose Sports</h4>
+    <h4>4. Ajouter des activités</h4>
     <div>
       <select name="sport" ng-model="sport">
         <option ng-repeat="element in listeSport" ng-value="element.id">{{ element.name }}<option/>
       </select>
 
-        <button type='button' ng-click="addSport()">Add Sport</button>
+        <button type='button' ng-click="addSport()">Ajouter l'activité</button>
 
         <div >
           <div class="row">
@@ -50,7 +51,7 @@
                 <img src="http://placehold.it/250x150&text=img1" alt="">
                 <div class="caption">
                   <h4>{{element.name}}</h4>
-                  <button type='button' ng-click="removeSport(element)">remove</button>
+                  <button type='button' ng-click="removeSport(element)">Enlever</button>
                 </div>
               </div>
             </div>

@@ -12,9 +12,9 @@ module weekEndApp.Controllers {
 
 
   export class LoginCtrl {
-    static $inject = ['$scope', '$rootScope', 'AUTH_EVENTS','AuthService','$route'];
+    static $inject = ['$scope', '$rootScope', 'AUTH_EVENTS','AuthService','$location',"$route"];
 
-    constructor (private $scope,private $rootScope,private AUTH_EVENTS,private AuthService,private $route) {
+    constructor (private $scope,private $rootScope,private AUTH_EVENTS,private AuthService,private $location,private $route) {
       this.initController();
     }
     initController(){
@@ -33,21 +33,24 @@ module weekEndApp.Controllers {
           if(user){
             this.$rootScope.$broadcast(this.AUTH_EVENTS.loginSuccess);
             this.$scope.setCurrentUser(user);
-            this.$route.reload();
+            //  this.$route.reload();
           }else{
             this.$scope.errors="Bad login or password";
           }
         });
       };
 
-      this.$scope.logout =  (credentials)=> {
-
-        this.$rootScope.$broadcast(this.AUTH_EVENTS.logoutSuccess);
-        this.$scope.setCurrentUser(null);
+      this.$scope.logout =  ()=> {
+        //this.$rootScope.$broadcast(this.AUTH_EVENTS.logoutSuccess);
         this.AuthService.logout();
+
         this.$scope.credentials = null;
-        this.$route.reload();
-      };
+
+  this.$scope.setCurrentUser(null);
+  this.$scope.errors=null;
+        this.$location.path('/');
+
+      }
 
     }
   }

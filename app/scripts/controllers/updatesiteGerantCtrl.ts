@@ -88,6 +88,7 @@ module weekEndApp.Controllers {
         this.SitesRest.updateSite({
           id:this.$routeParams.id,
           name : this.$scope.name,
+          siteWeb :   this.$scope.web,
           activities:this.$scope.sports,
           location:this.$scope.markers[0].id
         }

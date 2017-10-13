@@ -3,14 +3,14 @@
   <form  novalidate ng-submit="form.$valid && register(credentials)" name="form" >
     <div  iv class="form-group">
 
-      <label  for="username">Pseudo (6 or more characters)</label>
-      <input class="form-control" type="text" id="username" name="pseudo" ng-model="credentials.pseudo" ng-minlength="6" ng-maxlength="30" required >
+      <label  for="username">Pseudo (6 ou plus caractères)</label>
+      <input class="form-control" type="text" id="username" name="pseudo" ng-model="credentials.pseudo" ng-minlength="6" ng-maxlength="16" required >
       <div ng-messages="form.pseudo.$error" ng-if="form.$submitted" role="alert">
-        <div ng-message="required" class="text-danger">Please enter a pseudo</div>
+        <div ng-message="required" class="text-danger">Veuillez mettre un Pseduo</div>
 
-        <div ng-message="minlength" class="text-danger">Your pseudo is too short</div>
+        <div ng-message="minlength" class="text-danger">Votre pseudo est trop court</div>
 
-        <div ng-message="maxlength" class="text-danger">Your pseudo is too long</div>
+        <div ng-message="maxlength" class="text-danger">Votre pseudo est trop long</div>
 
 
       </div>
@@ -21,9 +21,9 @@
     <label for="password">Password</label>
     <input class="form-control" type="password" id="password" name="password"  ng-model="credentials.password" ng-minlength="6" ng-maxlength="60" required>
     <div ng-messages="form.password.$error" ng-if="form.$submitted" role="alert">
-      <div ng-message="required" class="text-danger" >Please enter a password</div>
-      <div ng-message="minlength" class="text-danger">Your password is too short</div>
-      <div ng-message="maxlength" class="text-danger">Your password is too long</div>
+      <div ng-message="required" class="text-danger" >Veuillez mettre un password</div>
+      <div ng-message="minlength" class="text-danger">Votre password est trop court</div>
+      <div ng-message="maxlength" class="text-danger">Votre password est trop court</div>
 
     </div>
 
@@ -33,15 +33,15 @@
     <label  for="email">Email</label>
     <input class="form-control" type="email" id="email" name="email" ng-model="credentials.emailAddress" required>
     <div ng-messages="form.email.$error" ng-if="form.$submitted" role="alert">
-      <div ng-message="required" class="text-danger">Please enter an email address</div>
-      <div ng-message="email" class="text-danger">Must be a valid email address</div>
+      <div ng-message="required" class="text-danger">Veuillez mettre une adresse email</div>
+      <div ng-message="email" class="text-danger">Cela doit etre une adresse email valide</div>
     </div>
 
       <br>
 
 
 
-  <button class="btn btn-primary" type="submit">Register</button>
+  <button class="btn btn-primary" type="submit">Je m'inscris</button>
 </div>
 </form>
 

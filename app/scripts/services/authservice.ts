@@ -5,9 +5,9 @@ module weekEndApp.Factory {
 
 
   export class AuthService {
-  
+
     urlBase :string = '/auth/';
-    constructor (private $resource,private urlWeekTest,private $localStorage) {
+    constructor (private $resource,private urlWeekTest,private $localStorage,private USER_ROLES) {
 
     }
 
@@ -55,19 +55,19 @@ module weekEndApp.Factory {
     logout() {
 
       delete this.$localStorage.currentUser;
+      delete this.$localStorage.basic;
+      this.$localStorage.role = this.USER_ROLES.guest;
 
     }
 
-    isAuthenticated() {
-      return !!this.$localStorage.currentUser;
-    }
+
 
     isAuthorized(authorizedRoles) {
       if (!angular.isArray(authorizedRoles)) {
+
         authorizedRoles = [authorizedRoles];
       }
-      return (this.isAuthenticated() &&
-      authorizedRoles.indexOf(this.$localStorage.currentUser.role[0]) !== -1);
+      return (authorizedRoles.indexOf(this.$localStorage.role) !== -1);
     }
 
   }
@@ -75,4 +75,4 @@ module weekEndApp.Factory {
 
 
 angular.module('weekEndApp')
-.factory('AuthService',["$resource",'urlWeekTest' ,"$localStorage", ($resource,urlWeekTest ,$localStorage) => new weekEndApp.Factory.AuthService($resource, urlWeekTest,$localStorage)]);
+.factory('AuthService',["$resource",'urlWeekTest' ,"$localStorage","USER_ROLES", ($resource,urlWeekTest ,$localStorage,USER_ROLES) => new weekEndApp.Factory.AuthService($resource, urlWeekTest,$localStorage,USER_ROLES)]);

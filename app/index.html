@@ -58,23 +58,27 @@
   </form> -->
 
   <ul class="nav navbar-nav navbar-left">
-    <li class="dropdown">
-      <a class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+    <li ng-if="currentUser && isAuthorized(userRoles.user)" class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown"><strong>Vos préférences</strong> <b class="caret"></b></a>
       <ul class="dropdown-menu dropdown-menu-primary">
-        <li><a ng-href="#!/activities">Choose your Activities</a></li>
-        <li><a ng-href="#!/locations">Choose your Homes</a></li>
-        <li class="divider"></li>
-        <li><a ng-href="#!/gerant/addsite">Add Site</a></li>
-        <li><a ng-href="#!/gerant/sites">Update Site</a></li>
+        <li><a ng-href="#!/activities">Vos activitées</a></li>
+        <li><a ng-href="#!/locations">Vos lieux</a></li>
+      </ul>
+    </li>
+    <li ng-if="currentUser  && isAuthorized(userRoles.gerant)" class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown"><strong>Site</strong> <b class="caret"></b></a>
+      <ul class="dropdown-menu dropdown-menu-primary">
+        <li><a ng-href="#!/gerant/addsite">Ajouter un Site</a></li>
+        <li><a ng-href="#!/gerant/sites">Mettre à jour Site</a></li>
       </ul>
     </li>
     <li class="navbar-text" ng-if="currentUser">Bienvenue {{ currentUser.pseudo }}</li>
   </ul>
   <ul class="nav navbar-nav navbar-right" ng-controller="LoginCtrl" >
-    <li ng-if="currentUser" ><a ng-click="logout()">Logout</a></li>
+    <li ng-if="currentUser" ><a ng-click="logout()">Se déconnecter</a></li>
 
       <li class="dropdown" ng-if="!currentUser" >
-        <a  class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+        <a  class="dropdown-toggle" data-toggle="dropdown"><b>Se connecter</b> <span class="caret"></span></a>
         <ul id="login-dp" class="dropdown-menu" >
           <li>
             <div class="row">
@@ -93,13 +97,13 @@
                   </div>
                     <div ng-if="errors" class="text-danger">{{errors}}</div>
                   <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                    <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
                   </div>
 
                 </form>
               </div>
               <div class="bottom text-center">
-                New here ? <a href="#!/register"><b>Join Us</b></a>
+                Nouveau ici ? <a href="#!/register"><b>Rejoignez nous</b></a>
               </div>
             </div>
           </li>

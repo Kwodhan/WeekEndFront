@@ -30,8 +30,8 @@ angular.module('weekEndApp')
 
 angular.module('weekEndApp')
 .constant('USER_ROLES', {
+  guest : 'ROLE_GUEST',
   admin: 'ROLE_ADMIN',
   gerant: 'ROLE_GERANT',
   user: 'ROLE_USER',
-  guest: 'ROLE_GUEST'
 })
