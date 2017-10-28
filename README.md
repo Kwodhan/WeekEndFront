@@ -1,12 +1,30 @@
-# week-end
+# WeekEndFront
+Un site web nodejs de gestion de Week-End
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.16.0.
+## Usage with WeekEndProject
+API app : https://github.com/Kwodhan/WeekEndProject   
 
-## Build & development
+#### 1. Build back
+cd WeekEndProject/   
+mvn package -DskipTests     
+docker build --tag "weekend" .  
 
-Run `grunt` for building and `grunt serve` for preview.
+#### 2. Build front
+cd WeekEndFront/   
+docker build --tag "front" .     
 
-## Testing
+#### 3. Build All
+cd WeekEndFront/    
+or     
+cd WeekEndProject/    
+docker-composer up  
 
-Running `grunt test` will run the unit tests with karma.
+## Role
+
+| Role                                   |  Description| 
+| -------------------------------------------- | --------- |
+|ROLE_USER| Choisie ses activités et ses localisations| 
+|ROLE_GERANT| Ajoute des sites|
+|ROLE_GUEST| ne peux rien faire|
+
+
