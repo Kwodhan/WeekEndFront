@@ -12,7 +12,7 @@ EXPOSE 9000 35729
 WORKDIR /WeekEndFront
 
 # Copy the current directory contents into the container at /app
-ADD WeekEndFront/WeekEndFront /
+ADD WeekEndFront/ /
 
 
 RUN set -ex;\
