@@ -6,7 +6,7 @@
       <label  for="username">Pseudo (6 ou plus caractères)</label>
       <input class="form-control" type="text" id="username" name="pseudo" ng-model="credentials.pseudo" ng-minlength="6" ng-maxlength="16" required >
       <div ng-messages="form.pseudo.$error" ng-if="form.$submitted" role="alert">
-        <div ng-message="required" class="text-danger">Veuillez mettre un Pseduo</div>
+        <div ng-message="required" class="text-danger">Veuillez mettre un Pseudo</div>
 
         <div ng-message="minlength" class="text-danger">Votre pseudo est trop court</div>
 
