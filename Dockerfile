@@ -19,6 +19,6 @@ RUN set -ex;\
     apt-get update && apt-get install -y ruby-compass; \
     npm install -g grunt-cli bower yo generator-karma generator-angular wiredep;
 
-CMD ["bower","install"]
 CMD ["npm","install"]
+CMD ["bower","install","--force"]
 CMD ["grunt","serve"]
