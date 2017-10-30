@@ -1,5 +1,5 @@
 # WeekEndFront
-Un site web nodejs de gestion de Week-End
+Un site web nodejs de gestion de Week-End   
 port : 9000   
 url : /   
 
@@ -36,8 +36,9 @@ Si le temps ne correspond pas à une bonne méteo pour un sport, un message sera
 Ajoute des sites   
     
 Pour créer un Gérant :   
-envoyer une requete POST à l'URL suivante :    
-localhost/WeekEndProject/api/auth/creategerantweekend    
+envoyer une requete POST à l'API rest:    
+URL : localhost:8080/WeekEndProject/api/auth/creategerantweekend  
+BODY :     
 ```json
 {
 	"pseudo":"gerant",
