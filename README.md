@@ -1,7 +1,7 @@
 # WeekEndFront
 Un site web nodejs de gestion de Week-End
-port : 9000
-url : /
+port : 9000   
+url : /   
 
 ## Usage with WeekEndProject
 API app : https://github.com/Kwodhan/WeekEndProject   
@@ -50,4 +50,4 @@ localhost/WeekEndProject/api/auth/creategerantweekend
 
 
 ### Guest
-Ne peut rien faire apars s'enregister ou s'authentifier pour devenir User
+Ne peut rien faire à part s’enregistrer ou s'authentifier pour devenir User
