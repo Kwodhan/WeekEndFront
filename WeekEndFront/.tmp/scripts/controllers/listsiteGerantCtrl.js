@@ -23,6 +23,13 @@ var weekEndApp;
                 promise.then(function (data) {
                     _this.$scope.liste = data.data;
                 });
+                this.$scope.delete = function (element) {
+                    _this.SitesRest.deleteSite(element.id);
+                    var index = _this.$scope.liste.indexOf(element);
+                    if (index > -1) {
+                        _this.$scope.liste.splice(index, 1);
+                    }
+                };
             };
             ListsitesGerantCtrl.$inject = ['$scope', 'SitesRest'];
             return ListsitesGerantCtrl;

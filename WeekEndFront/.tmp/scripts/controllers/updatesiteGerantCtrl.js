@@ -26,19 +26,24 @@ var weekEndApp;
                 var _this = this;
                 var site = this.SitesRest.getSite(this.$routeParams.id);
                 site.then(function (data) {
-                    _this.$scope.name = data.data[0].name;
-                    _this.$scope.sports = data.data[0].activities;
-                    var location = data.data[0].location;
-                    _this.$scope.markers = [{
-                            coord: {
-                                latitude: location.latitude,
-                                longitude: location.longitude
-                            },
-                            city: location.city,
-                            region: location.region,
-                            icon: _this.pin_url(location.city),
-                            id: location.id
-                        }];
+                    if (data) {
+                        _this.$scope.name = data.data[0].name;
+                        _this.$scope.sports = data.data[0].activities;
+                        var location = data.data[0].location;
+                        _this.$scope.markers = [{
+                                coord: {
+                                    latitude: location.latitude,
+                                    longitude: location.longitude
+                                },
+                                city: location.city,
+                                region: location.region,
+                                icon: _this.pin_url(location.city),
+                                id: location.id
+                            }];
+                    }
+                    else {
+                        _this.$location.path('/');
+                    }
                 });
                 var promise = this.ActivitiesRest.getActivities();
                 promise.then(function (data) {

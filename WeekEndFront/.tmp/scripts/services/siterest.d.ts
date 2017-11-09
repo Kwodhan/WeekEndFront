@@ -9,6 +9,7 @@ declare module weekEndApp.Services {
         urlBase: string;
         constructor($resource: any, urlWeekTest: any, $localStorage: any, UpdateSite: any);
         getSite(id: any): any;
+        deleteSite(id: any): void;
         getSites(): any;
         postSite(site: any): any;
         updateSite(site: any): any;

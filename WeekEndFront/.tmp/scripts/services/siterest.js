@@ -21,8 +21,19 @@ var weekEndApp;
                 });
                 var site = Site.get({ id: id }).$promise.then(function (data) {
                     return (data.toJSON());
+                }, function (data) {
+                    null;
                 });
                 return site;
+            };
+            SitesRest.prototype.deleteSite = function (id) {
+                var Site = this.$resource(this.urlWeekTest + this.urlBase + ':id/', { id: '@id' }, {
+                    delete: {
+                        method: 'DELETE',
+                        headers: { 'Authorization': (this.$localStorage.basic ? this.$localStorage.basic : '') }
+                    }
+                });
+                Site.delete({ id: id });
             };
             SitesRest.prototype.getSites = function () {
                 var Site = this.$resource(this.urlWeekTest + this.urlBase, {}, {

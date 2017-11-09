@@ -24,7 +24,8 @@ module weekEndApp.Controllers {
 
       var site = this.SitesRest.getSite(this.$routeParams.id);
       site.then((data) =>{
-
+        
+        if(data){
         this.$scope.name=data.data[0].name;
         this.$scope.sports=data.data[0].activities;
         var location =data.data[0].location;
@@ -39,7 +40,9 @@ module weekEndApp.Controllers {
           icon:this.pin_url(location.city),
           id: location.id
         }];
-      });
+      }else{
+  this.$location.path('/');
+      }});
 
       var promise = this.ActivitiesRest.getActivities();
       promise.then((data) =>{

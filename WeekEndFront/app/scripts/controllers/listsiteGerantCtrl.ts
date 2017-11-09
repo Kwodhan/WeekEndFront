@@ -24,8 +24,24 @@ module weekEndApp.Controllers {
 
         this.$scope.liste = data.data;
       });
+      this.$scope.delete = (element)=> {
+
+          this.SitesRest.deleteSite(element.id);
+          var index =   this.$scope.liste.indexOf(element);
+          if (index > -1) {
+            this.$scope.liste.splice(index, 1);
+          }
+      };
+
+
+
+
 
     }
+
+
   }
+
+
 }
 angular.module('weekEndApp').controller('ListsitesGerantCtrl', weekEndApp.Controllers.ListsitesGerantCtrl);

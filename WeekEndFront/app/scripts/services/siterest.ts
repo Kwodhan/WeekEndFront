@@ -22,9 +22,22 @@
         var site = Site.get({id:id}).$promise.then(function(data) {
 
           return (data.toJSON());
+        },function(data) {
+          null;
         });
         return site;
       }
+
+      deleteSite(id) {
+        var Site = this.$resource(this.urlWeekTest+this.urlBase+':id/', {id:'@id'}, {
+          delete: {
+            method: 'DELETE',
+            headers: { 'Authorization': (this.$localStorage.basic? this.$localStorage.basic : '') }
+          }
+        });
+        Site.delete({id:id});
+      }
+
 
       getSites() {
         var Site = this.$resource(this.urlWeekTest+this.urlBase,{}, {
